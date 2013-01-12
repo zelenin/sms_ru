@@ -9,6 +9,7 @@
  * @license http://opensource.org/licenses/gpl-3.0.html GPL-3.0
  */
 
+ if ( !class_exists( 'sms_ru' ) ) :
 
 class sms_ru {
 
@@ -323,5 +324,7 @@ class sms_ru {
 	}
 
 }
+
+endif;
 
 ?>

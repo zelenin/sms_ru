@@ -50,8 +50,6 @@ PHP-класс для работы с api сервиса [sms.ru](http://sms.ru)
 
     $sms->auth_check();
 
-## Автор
+## Author
 
-[Александр Зеленин](https://github.com/zelenin/)
-
-e-mail: aleksandr@zelenin.me
+[Александр Зеленин](https://github.com/zelenin/), e-mail: [aleksandr@zelenin.me](mailto:aleksandr@zelenin.me)
