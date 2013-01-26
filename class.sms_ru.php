@@ -9,7 +9,7 @@
  * @license http://opensource.org/licenses/gpl-3.0.html GPL-3.0
  */
 
- if ( !class_exists( 'sms_ru' ) ) :
+namespace zelenin;
 
 class sms_ru {
 
@@ -146,12 +146,11 @@ class sms_ru {
 		$result = $this->curl( $url, $params );
 		$result = explode( "\n", $result );
 
-		$response = array(
+		return array(
 			'code' => $result[0],
 			'id' => $result[1],
 			'balance' => str_replace( 'balance=', '', $result[2] )
 		);
-		return $response;
 
 	}
 
@@ -324,7 +323,5 @@ class sms_ru {
 	}
 
 }
-
-endif;
 
 ?>

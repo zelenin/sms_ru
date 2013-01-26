@@ -2,7 +2,7 @@
 
 require_once( 'class.sms_ru.php' );
 
-$sms = new sms_ru( 'api_id', 'login', 'password' );
+$sms = new zelenin\sms_ru( 'api_id', 'login', 'password' );
 
 // $sms->sms_send( '79112223344', 'Текст SMS' );
 
