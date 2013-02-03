@@ -2,7 +2,7 @@
 
 /**
  * Class for sms.ru
- * @package sms_ru
+ * @package smsru
  * @author Aleksandr Zelenin <aleksandr@zelenin.me>
  * @link https://github.com/zelenin/sms_ru
  * @version 1.0
@@ -11,7 +11,7 @@
 
 namespace zelenin;
 
-class sms_ru {
+class smsru {
 
 	const HOST  = 'http://sms.ru/';
 	const SEND = 'sms/send?';

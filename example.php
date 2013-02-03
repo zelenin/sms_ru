@@ -1,8 +1,8 @@
 <?php
 
-require_once( 'class.sms_ru.php' );
+require_once( 'smsru.php' );
 
-$sms = new zelenin\sms_ru( 'api_id', 'login', 'password' );
+$sms = new \zelenin\smsru( 'api_id', 'login', 'password' );
 
 // $sms->sms_send( '79112223344', 'Текст SMS' );
 

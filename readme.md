@@ -6,15 +6,15 @@ PHP-класс для работы с api сервиса [sms.ru](http://sms.ru)
 
 Подключение класса:
 
-    require_once( 'class.sms_ru.php' );
+    require_once( 'smsru.php' );
 
 Простая авторизация:
 
-    $sms = new zelenin\sms_ru( $api_id );
+    $sms = new \zelenin\smsru( $api_id );
 
 Усиленная авторизация:
 
-    $sms = new zelenin\sms_ru( $api_id, $login = null, $pwd = null );
+    $sms = new \zelenin\smsru( $api_id, $login = null, $pwd = null );
 
 Отправка SMS:
 
