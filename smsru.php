@@ -5,7 +5,7 @@
  * @package smsru
  * @author Aleksandr Zelenin <aleksandr@zelenin.me>
  * @link https://github.com/zelenin/sms_ru
- * @version 1.0
+ * @version 1.1
  * @license http://opensource.org/licenses/gpl-3.0.html GPL-3.0
  */
 
@@ -22,6 +22,9 @@ class smsru {
 	const SENDERS = 'my/senders?';
 	const GET_TOKEN = 'auth/get_token';
 	const CHECK = 'auth/check?';
+	const ADD = 'stoplist/add?';
+	const DEL = 'stoplist/del?';
+	const GET = 'stoplist/get??';
 
 	private $api_id;
 	private $login;
@@ -34,89 +37,115 @@ class smsru {
 	protected $response_code = array(
 
 		'send' => array(
-			'100' => 'Message is accepted to send',
-			'200' => 'Incorrect api_id',
-			'201' => 'Not enough money',
-			'202' => 'Incorrect recipient',
-			'203' => 'No text messages',
-			'204' => 'The name of the sender is not agreed with the administration',
-			'205' => 'The message is too long (more than 5 SMS)',
-			'206' => 'Exceeded the daily limit for sending messages',
-			'207' => 'On this number can not send messages',
-			'208' => 'Time parameter is incorrect',
-			'210' => 'Use GET, POST should be used where',
-			'211' => 'The method was not found',
-			'220' => 'Service is temporarily unavailable, please try later',
+			'100' => 'Сообщение принято к отправке. На следующих строчках вы найдете идентификаторы отправленных сообщений в том же порядке, в котором вы указали номера, на которых совершалась отправка.',
+			'200' => 'Неправильный api_id',
+			'201' => 'Не хватает средств на лицевом счету',
+			'202' => 'Неправильно указан получатель',
+			'203' => 'Нет текста сообщения',
+			'204' => 'Имя отправителя не согласовано с администрацией',
+			'205' => 'Сообщение слишком длинное (превышает 8 СМС)',
+			'206' => 'Будет превышен или уже превышен дневной лимит на отправку сообщений',
+			'207' => 'На этот номер (или один из номеров) нельзя отправлять сообщения, либо указано более 100 номеров в списке получателей',
+			'208' => 'Параметр time указан неправильно',
+			'209' => 'Вы добавили этот номер (или один из номеров) в стоп-лист',
+			'210' => 'Используется GET, где необходимо использовать POST',
+			'211' => 'Метод не найден',
+			'220' => 'Сервис временно недоступен, попробуйте чуть позже.',
 			'300' => 'Неправильный token (возможно истек срок действия, либо ваш IP изменился)',
 			'301' => 'Неправильный пароль, либо пользователь не найден',
 			'302' => 'Пользователь авторизован, но аккаунт не подтвержден (пользователь не ввел код, присланный в регистрационной смс)'
 		),
 
 		'status' => array(
-			'-1' => 'Message not found',
-			'100' => 'Message in the queue',
-			'101' => 'Message to the operator',
-			'102' => 'Your post (in transit)',
-			'103' => 'Message delivered',
-			'104' => 'Can not be reached: the lifetime has expired',
-			'105' => 'Can not be reached: Removed from operator',
-			'106' => 'Can not be reached: failed to phone',
-			'107' => 'Can not be reached: unknown cause',
-			'108' => 'Can not be reached: rejected',
-			'200' => 'Incorrect api_id',
-			'210' => 'Use GET, POST should be used where',
-			'211' => 'The method was not found',
-			'220' => 'Service is temporarily unavailable, please try later',
+			'-1' => 'Сообщение не найдено.',
+			'100' => 'Сообщение находится в нашей очереди',
+			'101' => 'Сообщение передается оператору',
+			'102' => 'Сообщение отправлено (в пути)',
+			'103' => 'Сообщение доставлено',
+			'104' => 'Не может быть доставлено: время жизни истекло',
+			'105' => 'Не может быть доставлено: удалено оператором',
+			'106' => 'Не может быть доставлено: сбой в телефоне',
+			'107' => 'Не может быть доставлено: неизвестная причина',
+			'108' => 'Не может быть доставлено: отклонено',
+			'200' => 'Неправильный api_id',
+			'210' => 'Используется GET, где необходимо использовать POST',
+			'211' => 'Метод не найден',
+			'220' => 'Сервис временно недоступен, попробуйте чуть позже.',
 			'300' => 'Неправильный token (возможно истек срок действия, либо ваш IP изменился)',
 			'301' => 'Неправильный пароль, либо пользователь не найден',
 			'302' => 'Пользователь авторизован, но аккаунт не подтвержден (пользователь не ввел код, присланный в регистрационной смс)'
 		),
 
 		'cost' => array(
-			'100' => 'Request is made',
-			'200' => 'Incorrect api_id',
+			'100' => 'Запрос выполнен. На второй строчке будет указана стоимость сообщения. На третьей строчке будет указана его длина.',
+			'200' => 'Неправильный api_id',
 			'202' => 'Неправильно указан получатель',
 			'207' => 'На этот номер нельзя отправлять сообщения',
-			'210' => 'Use GET, POST should be used where',
-			'211' => 'The method was not found',
-			'220' => 'Service is temporarily unavailable, please try later',
+			'210' => 'Используется GET, где необходимо использовать POST',
+			'211' => 'Метод не найден',
+			'220' => 'Сервис временно недоступен, попробуйте чуть позже.',
 			'300' => 'Неправильный token (возможно истек срок действия, либо ваш IP изменился)',
 			'301' => 'Неправильный пароль, либо пользователь не найден',
 			'302' => 'Пользователь авторизован, но аккаунт не подтвержден (пользователь не ввел код, присланный в регистрационной смс)'
 		),
 
 		'balance' => array(
-			'100' => 'Request is made',
-			'200' => 'Incorrect api_id',
-			'210' => 'Use GET, POST should be used where',
-			'211' => 'The method was not found',
-			'220' => 'Service is temporarily unavailable, please try later',
+			'100' => 'Запрос выполнен. На второй строчке вы найдете ваше текущее состояние баланса.',
+			'200' => 'Неправильный api_id',
+			'210' => 'Используется GET, где необходимо использовать POST',
+			'211' => 'Метод не найден',
+			'220' => 'Сервис временно недоступен, попробуйте чуть позже.',
 			'300' => 'Неправильный token (возможно истек срок действия, либо ваш IP изменился)',
 			'301' => 'Неправильный пароль, либо пользователь не найден',
 			'302' => 'Пользователь авторизован, но аккаунт не подтвержден (пользователь не ввел код, присланный в регистрационной смс)'
 		),
 
 		'limit' => array(
-			'100' => 'Request is made',
-			'200' => 'Incorrect api_id',
-			'210' => 'Use GET, POST should be used where',
-			'211' => 'The method was not found',
-			'220' => 'Service is temporarily unavailable, please try later',
+			'100' => 'Запрос выполнен. На второй строчке вы найдете ваше текущее дневное ограничение. На третьей строчке количество сообщений, отправленных вами в текущий день.',
+			'200' => 'Неправильный api_id',
+			'210' => 'Используется GET, где необходимо использовать POST',
+			'211' => 'Метод не найден',
+			'220' => 'Сервис временно недоступен, попробуйте чуть позже.',
+			'300' => 'Неправильный token (возможно истек срок действия, либо ваш IP изменился)',
+			'301' => 'Неправильный пароль, либо пользователь не найден',
+			'302' => 'Пользователь авторизован, но аккаунт не подтвержден (пользователь не ввел код, присланный в регистрационной смс)'
+		),
+
+		'senders' => array(
+			'100' => 'Запрос выполнен. На второй и последующих строчках вы найдете ваших одобренных отправителей, которые можно использовать в параметре &from= метода sms/send.',
+			'200' => 'Неправильный api_id',
+			'210' => 'Используется GET, где необходимо использовать POST',
+			'211' => 'Метод не найден',
+			'220' => 'Сервис временно недоступен, попробуйте чуть позже.',
 			'300' => 'Неправильный token (возможно истек срок действия, либо ваш IP изменился)',
 			'301' => 'Неправильный пароль, либо пользователь не найден',
 			'302' => 'Пользователь авторизован, но аккаунт не подтвержден (пользователь не ввел код, присланный в регистрационной смс)'
 		),
 
 		'check' => array(
-			'100' => 'Number and password are the same',
-			'300' => 'Invalid token (may have expired, or your IP has changed)',
-			'301' => 'Wrong password or user not found',
+			'100' => 'ОК, номер телефона и пароль совпадают.',
+			'300' => 'Неправильный token (возможно истек срок действия, либо ваш IP изменился)',
+			'301' => 'Неправильный пароль, либо пользователь не найден',
 			'302' => 'Пользователь авторизован, но аккаунт не подтвержден (пользователь не ввел код, присланный в регистрационной смс)'
+		),
+
+		'add' => array(
+			'100' => 'Номер добавлен в стоплист.',
+			'202' => 'Номер телефона в неправильном формате'
+		),
+
+		'del' => array(
+			'100' => 'Номер удален из стоплиста.',
+			'202' => 'Номер телефона в неправильном формате'
+		),
+
+		'get' => array(
+			'100' => 'Запрос обработан. На последующих строчках будут идти номера телефонов, указанных в стоплисте в формате номер;примечание.'
 		)
 
 	);
 
-	function  __construct( $api_id, $login = null, $pwd = null ) {
+	public function  __construct( $api_id, $login = null, $pwd = null ) {
 		$this->api_id = $api_id;
 		$this->login = $login;
 		$this->pwd = $pwd;
@@ -155,29 +184,18 @@ class smsru {
 	}
 
 	public function sms_mail( $to, $text, $from = null ) {
-
-		$mail = $this->api_id . '@sms.ru';
+		$mail = $this->api_id . '@' . self::HOST;
 		$subject = isset( $from ) ? $to . ' from:' . $from : $to;
 		$headers = 'Content-Type: text/html; charset=UTF-8';
-
-		$response = mail( $mail, $subject, $text, $headers );
-		return $response;
-
+		return mail( $mail, $subject, $text, $headers );
 	}
 
 	public function sms_status( $id ) {
-
 		$url = self::HOST . self::STATUS;
-
 		$params = $this->get_auth_params();
 		$params['id'] = $id;
-		$result = $this->curl( $url, $params );
-
-		return $result;
-
+		return $this->curl( $url, $params );
 	}
-
-	// encoding
 
 	public function sms_cost( $to, $text ) {
 
@@ -191,46 +209,35 @@ class smsru {
 		$result = $this->curl( $url, $params );
 		$result = explode( "\n", $result );
 
-		$response = array(
+		return array(
 			'code' => $result[0],
 			'price' => $result[1],
 			'number' => $result[2]
 		);
-		return $response;
 
 	}
 
 	public function my_balance() {
-
 		$url = self::HOST . self::BALANCE;
-
 		$params = $this->get_auth_params();
 		$result = $this->curl( $url, $params );
 		$result = explode( "\n", $result );
-
-		$response = array(
+		return array(
 			'code' => $result[0],
 			'balance' => $result[1]
 		);
-		return $response;
-
 	}
 
 	public function my_limit() {
-
 		$url = self::HOST . self::LIMIT;
-
 		$params = $this->get_auth_params();
 		$result = $this->curl( $url, $params );
 		$result = explode( "\n", $result );
-
-		$response = array(
+		return array(
 			'code' => $result[0],
 			'total' => $result[1],
 			'current' => $result[2]
 		);
-		return $response;
-
 	}
 
 	public function my_senders() {
@@ -251,20 +258,50 @@ class smsru {
 	}
 
 	private function auth_get_token() {
-
 		$url = self::HOST . self::GET_TOKEN;
 		$this->token = $this->curl( $url );
 		return $this->token;
-
 	}
 
 	public function auth_check() {
-
 		$url = self::HOST . self::CHECK;
+		$params = $this->get_auth_params();
+		return $this->curl( $url, $params );
+	}
+
+	public function stoplist_add( $stoplist_phone, $stoplist_text ) {
+		$url = self::HOST . self::ADD;
+		$params = $this->get_auth_params();
+		$params['stoplist_phone'] = $stoplist_phone;
+		$params['stoplist_text'] = $stoplist_text;
+		return $this->curl( $url, $params );
+	}
+
+	public function stoplist_del( $stoplist_phone ) {
+		$url = self::HOST . self::DEL;
+		$params = $this->get_auth_params();
+		$params['stoplist_phone'] = $stoplist_phone;
+		return $this->curl( $url, $params );
+	}
+
+	public function stoplist_get() {
+
+		$url = self::HOST . self::GET;
 		$params = $this->get_auth_params();
 		$result = $this->curl( $url, $params );
 
-		return $result;
+		$result = explode( "\n", rtrim( $result ) );
+		$response = array(
+			'code' => $result[0],
+			'stoplist' => $result
+		);
+		for ( $i = 1; $i < count( $response['stoplist'] ); $i++ ) {
+			$result = explode( ';', $response['stoplist'][$i] );
+			$stoplist[$i-1]['number'] = $result[0];
+			$stoplist[$i-1]['note'] = $result[1];
+		}
+		$response['stoplist'] = $stoplist;
+		return $response;
 
 	}
 
@@ -273,7 +310,6 @@ class smsru {
 	}
 
 	private function curl( $url, $params = array() ) {
-
 		$ch = curl_init( $url );
 		$options = array(
 			CURLOPT_RETURNTRANSFER => 1,
@@ -285,7 +321,6 @@ class smsru {
 		curl_close( $ch );
 
 		return $result;
-
 	}
 
 	private function get_auth_params() {
@@ -308,7 +343,6 @@ class smsru {
 	}
 
 	public function translit( $text ) {
-
 		$iso9 = array(
 			'А' => 'A', 'Б' => 'B', 'В' => 'V', 'Г' => 'G', 'Д' => 'D', 'Е' => 'E', 'Ё' => 'Yo', 'Ж' => 'Zh', 'З' => 'Z', 'И' => 'I', 'Й' => 'J',
 			'К' => 'K', 'Л' => 'L', 'М' => 'M', 'Н' => 'N', 'О' => 'O', 'П' => 'P', 'Р' => 'R', 'С' => 'S', 'Т' => 'T', 'У' => 'U', 'Ф' => 'F',
@@ -319,7 +353,6 @@ class smsru {
 			'х' => 'h', 'ц' => 'ts', 'ч' => 'ch', 'ш' => 'sh', 'щ' => 'shh', 'ъ' => '``', 'ы' => 'y`', 'ь' => '`', 'э' => 'e`', 'ю' => 'yu', 'я' => 'ya'
 		);
 		return strtr( $text, $iso9 );
-
 	}
 
 }

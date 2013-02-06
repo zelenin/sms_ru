@@ -50,6 +50,18 @@ PHP-класс для работы с api сервиса [sms.ru](http://sms.ru)
 
     $sms->auth_check();
 
+Добавить номер в стоплист:
+
+	$sms->stoplist_add( '79112223344', 'Примечание' );
+
+Получить номера стоплиста:
+
+	$sms->stoplist_get();
+
+Удалить номер из стоп-листа:
+
+	$sms->stoplist_del( '79112223344' );
+
 ## Author
 
 [Александр Зеленин](https://github.com/zelenin/), e-mail: [aleksandr@zelenin.me](mailto:aleksandr@zelenin.me)

@@ -24,4 +24,10 @@ $sms = new \zelenin\smsru( 'api_id', 'login', 'password' );
 
 // $sms->auth_check();
 
+// $sms->stoplist_add( '79112223344', 'ban' );
+
+// $sms->stoplist_get();
+
+// $sms->stoplist_del( '79112223344' );
+
 ?>
