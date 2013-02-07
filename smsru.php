@@ -5,7 +5,7 @@
  * @package smsru
  * @author Aleksandr Zelenin <aleksandr@zelenin.me>
  * @link https://github.com/zelenin/sms_ru
- * @version 1.1
+ * @version 1.1.1
  * @license http://opensource.org/licenses/gpl-3.0.html GPL-3.0
  */
 
@@ -145,7 +145,7 @@ class smsru {
 
 	);
 
-	public function  __construct( $api_id, $login = null, $pwd = null ) {
+	public function  __construct( $api_id = null, $login = null, $pwd = null ) {
 		$this->api_id = $api_id;
 		$this->login = $login;
 		$this->pwd = $pwd;
@@ -306,7 +306,11 @@ class smsru {
 	}
 
 	private function get_sha512() {
-		$this->sha512 = hash( 'sha512', $this->pwd . $this->token . $this->api_id );
+		if ( !$this->api_id || empty( $this->api_id ) ) {
+			$this->sha512 = hash( 'sha512', $this->pwd . $this->token );
+		} else {
+			$this->sha512 = hash( 'sha512', $this->pwd . $this->token . $this->api_id );
+		}
 	}
 
 	private function curl( $url, $params = array() ) {

@@ -14,7 +14,11 @@ PHP-класс для работы с api сервиса [sms.ru](http://sms.ru)
 
 Усиленная авторизация:
 
-    $sms = new \zelenin\smsru( $api_id, $login = null, $pwd = null );
+    $sms = new \zelenin\smsru( $api_id, $login, $pwd );
+
+Усиленная авторизация с логином и паролем:
+
+	$sms = new \zelenin\smsru( null, $login, $pwd );
 
 Отправка SMS:
 

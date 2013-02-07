@@ -3,6 +3,8 @@
 require_once( 'smsru.php' );
 
 $sms = new \zelenin\smsru( 'api_id', 'login', 'password' );
+// $sms = new \zelenin\smsru( 'api_id' );
+// $sms = new \zelenin\smsru( null, 'login', 'password' );
 
 // $sms->sms_send( '79112223344', 'Текст SMS' );
 
