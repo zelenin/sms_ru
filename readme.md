@@ -23,6 +23,7 @@ PHP-класс для работы с api сервиса [sms.ru](http://sms.ru)
 Отправка SMS:
 
     $sms->sms_send( '79112223344', 'Текст SMS' );
+	$sms->sms_send( '79112223344,79115556677,79118889900', 'Текст SMS' );
 	$sms->sms_send( '79112223344', 'Текст SMS', 'Имя отправителя', time(), $test = true, $partner_id );
 
 Отправка SMS через e-mail:

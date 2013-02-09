@@ -8,6 +8,8 @@ $sms = new \zelenin\smsru( 'api_id', 'login', 'password' );
 
 // $sms->sms_send( '79112223344', 'Текст SMS' );
 
+// $sms->sms_send( '79112223344,79115556677,79118889900', 'Текст SMS' );
+
 // $sms->sms_send( '79112223344', 'Текст SMS', 'Имя отправителя', time(), $test = true, $partner_id );
 
 // $sms->sms_mail( '79112223344', 'Текст SMS' );

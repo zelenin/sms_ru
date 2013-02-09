@@ -5,7 +5,7 @@
  * @package smsru
  * @author Aleksandr Zelenin <aleksandr@zelenin.me>
  * @link https://github.com/zelenin/sms_ru
- * @version 1.1.1
+ * @version 1.1.2
  * @license http://opensource.org/licenses/gpl-3.0.html GPL-3.0
  */
 
@@ -175,11 +175,23 @@ class smsru {
 		$result = $this->curl( $url, $params );
 		$result = explode( "\n", $result );
 
-		return array(
-			'code' => $result[0],
-			'id' => $result[1],
-			'balance' => str_replace( 'balance=', '', $result[2] )
-		);
+		$response = array();
+
+		$response['code'] = $result[0];
+		unset( $result[0] );
+
+		$ids = array();
+
+		foreach ( $result as $id ) {
+			if ( !preg_match( '/=/', $id ) ) {
+				$response['ids'][] =  $id;
+			} else {
+				$result = explode( '=', $id );
+				$response[$result[0]] = $result[1];
+			}
+		}
+
+		return $response;
 
 	}
 
