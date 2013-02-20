@@ -5,7 +5,7 @@
  * @package smsru
  * @author Aleksandr Zelenin <aleksandr@zelenin.me>
  * @link https://github.com/zelenin/sms_ru
- * @version 1.1.2
+ * @version 1.1.3
  * @license http://opensource.org/licenses/gpl-3.0.html GPL-3.0
  */
 
@@ -24,7 +24,7 @@ class smsru {
 	const CHECK = 'auth/check?';
 	const ADD = 'stoplist/add?';
 	const DEL = 'stoplist/del?';
-	const GET = 'stoplist/get??';
+	const GET = 'stoplist/get?';
 
 	private $api_id;
 	private $login;
