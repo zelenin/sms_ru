@@ -3,17 +3,17 @@
 /**
  * Class for sms.ru
  * @package smsru
- * @author Aleksandr Zelenin <aleksandr@zelenin.me>
- * @link https://github.com/zelenin/sms_ru
+ * @author  Aleksandr Zelenin <aleksandr@zelenin.me>
+ * @link    https://github.com/zelenin/sms_ru
  * @version 1.1.3
  * @license http://opensource.org/licenses/gpl-3.0.html GPL-3.0
  */
 
-namespace zelenin;
+namespace Zelenin;
 
-class smsru {
-
-	const HOST  = 'http://sms.ru/';
+class smsru
+{
+	const HOST = 'http://sms.ru/';
 	const SEND = 'sms/send?';
 	const STATUS = 'sms/status?';
 	const COST = 'sms/cost?';
@@ -25,15 +25,12 @@ class smsru {
 	const ADD = 'stoplist/add?';
 	const DEL = 'stoplist/del?';
 	const GET = 'stoplist/get?';
-
+	const UCS = 'sms/ucs?';
 	private $api_id;
 	private $login;
 	private $pwd;
-
 	private $token;
 	private $sha512;
-	private $strong_auth = false;
-
 	protected $response_code = array(
 
 		'send' => array(
@@ -145,14 +142,15 @@ class smsru {
 
 	);
 
-	public function  __construct( $api_id = null, $login = null, $pwd = null ) {
+	public function  __construct( $api_id = null, $login = null, $pwd = null )
+	{
 		$this->api_id = $api_id;
 		$this->login = $login;
 		$this->pwd = $pwd;
 	}
 
-	public function sms_send( $to, $text, $from = null, $time = null, $test = false, $partner_id = null ) {
-
+	public function sms_send( $to, $text, $from = null, $time = null, $test = false, $partner_id = null )
+	{
 		$url = self::HOST . self::SEND;
 		$this->id = null;
 
@@ -160,17 +158,21 @@ class smsru {
 		$params['to'] = $to;
 		$params['text'] = $text;
 
-		if ( $from )
+		if ( $from ) {
 			$params['from'] = $from;
+		}
 
-		if ( $time && $time < ( time() + 7 * 60 * 60 * 24 ) )
+		if ( $time && $time < ( time() + 7 * 60 * 60 * 24 ) ) {
 			$params['time'] = $time;
+		}
 
-		if ( $test )
+		if ( $test ) {
 			$params['test'] = 1;
+		}
 
-		if ( $partner_id )
+		if ( $partner_id ) {
 			$params['partner_id'] = $partner_id;
+		}
 
 		$result = $this->curl( $url, $params );
 		$result = explode( "\n", $result );
@@ -180,11 +182,9 @@ class smsru {
 		$response['code'] = $result[0];
 		unset( $result[0] );
 
-		$ids = array();
-
 		foreach ( $result as $id ) {
 			if ( !preg_match( '/=/', $id ) ) {
-				$response['ids'][] =  $id;
+				$response['ids'][] = $id;
 			} else {
 				$result = explode( '=', $id );
 				$response[$result[0]] = $result[1];
@@ -192,25 +192,26 @@ class smsru {
 		}
 
 		return $response;
-
 	}
 
-	public function sms_mail( $to, $text, $from = null ) {
+	public function sms_mail( $to, $text, $from = null )
+	{
 		$mail = $this->api_id . '@' . self::HOST;
 		$subject = isset( $from ) ? $to . ' from:' . $from : $to;
 		$headers = 'Content-Type: text/html; charset=UTF-8';
 		return mail( $mail, $subject, $text, $headers );
 	}
 
-	public function sms_status( $id ) {
+	public function sms_status( $id )
+	{
 		$url = self::HOST . self::STATUS;
 		$params = $this->get_auth_params();
 		$params['id'] = $id;
 		return $this->curl( $url, $params );
 	}
 
-	public function sms_cost( $to, $text ) {
-
+	public function sms_cost( $to, $text )
+	{
 		$url = self::HOST . self::COST;
 		$this->id = null;
 
@@ -226,10 +227,10 @@ class smsru {
 			'price' => $result[1],
 			'number' => $result[2]
 		);
-
 	}
 
-	public function my_balance() {
+	public function my_balance()
+	{
 		$url = self::HOST . self::BALANCE;
 		$params = $this->get_auth_params();
 		$result = $this->curl( $url, $params );
@@ -240,7 +241,8 @@ class smsru {
 		);
 	}
 
-	public function my_limit() {
+	public function my_limit()
+	{
 		$url = self::HOST . self::LIMIT;
 		$params = $this->get_auth_params();
 		$result = $this->curl( $url, $params );
@@ -252,8 +254,8 @@ class smsru {
 		);
 	}
 
-	public function my_senders() {
-
+	public function my_senders()
+	{
 		$url = self::HOST . self::SENDERS;
 		$params = $this->get_auth_params();
 		$result = $this->curl( $url, $params );
@@ -266,22 +268,24 @@ class smsru {
 		unset( $response['senders'][0] );
 		$response['senders'] = array_values( $response['senders'] );
 		return $response;
-
 	}
 
-	private function auth_get_token() {
+	private function auth_get_token()
+	{
 		$url = self::HOST . self::GET_TOKEN;
 		$this->token = $this->curl( $url );
 		return $this->token;
 	}
 
-	public function auth_check() {
+	public function auth_check()
+	{
 		$url = self::HOST . self::CHECK;
 		$params = $this->get_auth_params();
 		return $this->curl( $url, $params );
 	}
 
-	public function stoplist_add( $stoplist_phone, $stoplist_text ) {
+	public function stoplist_add( $stoplist_phone, $stoplist_text )
+	{
 		$url = self::HOST . self::ADD;
 		$params = $this->get_auth_params();
 		$params['stoplist_phone'] = $stoplist_phone;
@@ -289,15 +293,16 @@ class smsru {
 		return $this->curl( $url, $params );
 	}
 
-	public function stoplist_del( $stoplist_phone ) {
+	public function stoplist_del( $stoplist_phone )
+	{
 		$url = self::HOST . self::DEL;
 		$params = $this->get_auth_params();
 		$params['stoplist_phone'] = $stoplist_phone;
 		return $this->curl( $url, $params );
 	}
 
-	public function stoplist_get() {
-
+	public function stoplist_get()
+	{
 		$url = self::HOST . self::GET;
 		$params = $this->get_auth_params();
 		$result = $this->curl( $url, $params );
@@ -309,15 +314,22 @@ class smsru {
 		);
 		for ( $i = 1; $i < count( $response['stoplist'] ); $i++ ) {
 			$result = explode( ';', $response['stoplist'][$i] );
-			$stoplist[$i-1]['number'] = $result[0];
-			$stoplist[$i-1]['note'] = $result[1];
+			$stoplist[$i - 1]['number'] = $result[0];
+			$stoplist[$i - 1]['note'] = $result[1];
 		}
 		$response['stoplist'] = $stoplist;
 		return $response;
-
 	}
 
-	private function get_sha512() {
+	public function sms_ucs()
+	{
+		$url = self::HOST . self::UCS;
+		$params = $this->get_auth_params();
+		return $this->curl( $url, $params );
+	}
+
+	private function get_sha512()
+	{
 		if ( !$this->api_id || empty( $this->api_id ) ) {
 			$this->sha512 = hash( 'sha512', $this->pwd . $this->token );
 		} else {
@@ -325,7 +337,8 @@ class smsru {
 		}
 	}
 
-	private function curl( $url, $params = array() ) {
+	private function curl( $url, $params = array() )
+	{
 		$ch = curl_init( $url );
 		$options = array(
 			CURLOPT_RETURNTRANSFER => 1,
@@ -339,8 +352,8 @@ class smsru {
 		return $result;
 	}
 
-	private function get_auth_params() {
-
+	private function get_auth_params()
+	{
 		if ( !empty( $this->login ) && !empty( $this->pwd ) ) {
 
 			$this->auth_get_token();
@@ -349,16 +362,15 @@ class smsru {
 			$params['login'] = $this->login;
 			$params['token'] = $this->token;
 			$params['sha512'] = $this->sha512;
-
 		} else {
 			$params['api_id'] = $this->api_id;
 		}
 
 		return $params;
-
 	}
 
-	public function translit( $text ) {
+	public function translit( $text )
+	{
 		$iso9 = array(
 			'А' => 'A', 'Б' => 'B', 'В' => 'V', 'Г' => 'G', 'Д' => 'D', 'Е' => 'E', 'Ё' => 'Yo', 'Ж' => 'Zh', 'З' => 'Z', 'И' => 'I', 'Й' => 'J',
 			'К' => 'K', 'Л' => 'L', 'М' => 'M', 'Н' => 'N', 'О' => 'O', 'П' => 'P', 'Р' => 'R', 'С' => 'S', 'Т' => 'T', 'У' => 'U', 'Ф' => 'F',
@@ -370,7 +382,4 @@ class smsru {
 		);
 		return strtr( $text, $iso9 );
 	}
-
 }
-
-?>
