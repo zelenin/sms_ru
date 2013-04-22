@@ -10,7 +10,13 @@ $sms = new \Zelenin\smsru( 'api_id', 'login', 'password' );
 
 // $sms->sms_send( '79112223344,79115556677,79118889900', 'Текст SMS' );
 
-// $sms->sms_send( '79112223344', 'Текст SMS', 'Имя отправителя', time(), $test = true, $partner_id );
+// $sms->sms_send( '79112223344', 'Текст SMS', 'Имя отправителя', time(), $translit = false, $test = true, $partner_id );
+
+$messages = array(
+	array( '79112223344', 'Текст СМС' ),
+	array( '79115556677', 'Текст СМС' )
+);
+$sms->multi_sms_send( $messages, 'Имя отправителя', time(), $translit = false, $test = true, $partner_id );
 
 // $sms->sms_mail( '79112223344', 'Текст SMS' );
 
