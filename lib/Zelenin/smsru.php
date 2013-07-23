@@ -173,7 +173,6 @@ class smsru
 
 		$result = $this->curl( $url, $params );
 		$result = explode( "\n", $result );
-		var_dump($url, $params);
 
 		$response = array();
 
