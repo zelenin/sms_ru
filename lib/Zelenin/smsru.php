@@ -142,7 +142,7 @@ class smsru
 		$this->pwd = $pwd;
 	}
 
-	public function sms_send( $to, $text, $from = null, $time = null, $translit = false, $test = false, $partner_id = null )
+	public function sms_send( $to, $text, $from = null, $time = null, $translit, $test = false, $partner_id = null )
 	{
 		$url = self::HOST . self::SEND;
 		$this->id = null;
@@ -159,7 +159,7 @@ class smsru
 			$params['time'] = $time;
 		}
 
-		if ( $translit ) {
+		if ( $translit == 'true' ) {
 			$params['translit'] = 1;
 		}
 
@@ -173,6 +173,7 @@ class smsru
 
 		$result = $this->curl( $url, $params );
 		$result = explode( "\n", $result );
+		var_dump($url, $params);
 
 		$response = array();
 
