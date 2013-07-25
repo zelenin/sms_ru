@@ -18,24 +18,23 @@ PHP-класс для работы с api сервиса [sms.ru](http://sms.ru)
 
 Усиленная авторизация с логином и паролем:
 
-	$sms = new \Zelenin\smsru( null, $login, $pwd );
+    $sms = new \Zelenin\smsru( null, $login, $pwd );
 
 Отправка SMS:
 
     $sms->sms_send( '79112223344', 'Текст SMS' );
-	$sms->sms_send( '79112223344,79115556677,79118889900', 'Текст SMS' );
-	$sms->sms_send( '79112223344', 'Текст SMS', 'Имя отправителя', time(), $translit, $test = true, $partner_id );
-
-	$messages = array(
-		array( '79112223344', 'Текст СМС' ),
-		array( '79115556677', 'Текст СМС' )
-	);
-	$sms->multi_sms_send( $messages, 'Имя отправителя', time(), $translit, $test = true, $partner_id );
+    $sms->sms_send( '79112223344,79115556677,79118889900', 'Текст SMS' );
+    $sms->sms_send( '79112223344', 'Текст SMS', 'Имя отправителя', time(), $translit, $test = true, $partner_id );
+    $messages = array(
+    	array( '79112223344', 'Текст СМС' ),
+    	array( '79115556677', 'Текст СМС' )
+    );
+    $sms->multi_sms_send( $messages, 'Имя отправителя', time(), $translit, $test = true, $partner_id );
 
 Отправка SMS через e-mail:
 
     $sms->sms_mail( '79112223344', 'Текст SMS' );
-	$sms->sms_mail( '79112223344', 'Текст SMS', 'Имя отправителя' );
+    $sms->sms_mail( '79112223344', 'Текст SMS', 'Имя отправителя' );
 
 Статус SMS:
 
@@ -63,16 +62,16 @@ PHP-класс для работы с api сервиса [sms.ru](http://sms.ru)
 
 Добавить номер в стоплист:
 
-	$sms->stoplist_add( '79112223344', 'Примечание' );
+    $sms->stoplist_add( '79112223344', 'Примечание' );
 
 Получить номера стоплиста:
 
-	$sms->stoplist_get();
+    $sms->stoplist_get();
 
 Удалить номер из стоп-листа:
 
-	$sms->stoplist_del( '79112223344' );
+    $sms->stoplist_del( '79112223344' );
 
-## Author
+## Автор
 
 [Александр Зеленин](https://github.com/zelenin/), e-mail: [aleksandr@zelenin.me](mailto:aleksandr@zelenin.me)
