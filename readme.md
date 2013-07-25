@@ -40,7 +40,7 @@ PHP-класс для работы с api сервиса [sms.ru](http://sms.ru)
 
     $sms->sms_status( 'SMS id' );
 
-Стоимость SMS:
+Стоимость SMS (по одному номеру за вызов):
 
     $sms->sms_cost( '79112223344', 'Текст SMS' );
 
