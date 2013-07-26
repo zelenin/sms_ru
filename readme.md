@@ -6,7 +6,7 @@ PHP-класс для работы с api сервиса [sms.ru](http://sms.ru)
 
 Подключение класса:
 
-    require_once( 'smsru.php' );
+    require_once 'lib/Zelenin/smsru.php';
 
 Простая авторизация:
 
@@ -14,33 +14,34 @@ PHP-класс для работы с api сервиса [sms.ru](http://sms.ru)
 
 Усиленная авторизация:
 
-    $sms = new \Zelenin\smsru( $api_id, $login, $pwd );
+    $sms = new \Zelenin\smsru( $api_id, $login, $password );
 
 Усиленная авторизация с логином и паролем:
 
-    $sms = new \Zelenin\smsru( null, $login, $pwd );
+	$sms = new \Zelenin\smsru( null, $login, $password );
 
 Отправка SMS:
 
     $sms->sms_send( '79112223344', 'Текст SMS' );
-    $sms->sms_send( '79112223344,79115556677,79118889900', 'Текст SMS' );
-    $sms->sms_send( '79112223344', 'Текст SMS', 'Имя отправителя', time(), $translit, $test = true, $partner_id );
-    $messages = array(
-    	array( '79112223344', 'Текст СМС' ),
-    	array( '79115556677', 'Текст СМС' )
-    );
-    $sms->multi_sms_send( $messages, 'Имя отправителя', time(), $translit, $test = true, $partner_id );
+	$sms->sms_send( '79112223344,79115556677,79118889900', 'Текст SMS' );
+	$sms->sms_send( '79112223344', 'Текст SMS', 'Имя отправителя', time(), $translit = false, $test = true, $partner_id );
+
+	$messages = array(
+		array( '79112223344', 'Текст СМС' ),
+		array( '79115556677', 'Текст СМС' )
+	);
+	$sms->multi_sms_send( $messages, 'Имя отправителя', time(), $translit = false, $test = true, $partner_id );
 
 Отправка SMS через e-mail:
 
     $sms->sms_mail( '79112223344', 'Текст SMS' );
-    $sms->sms_mail( '79112223344', 'Текст SMS', 'Имя отправителя' );
+	$sms->sms_mail( '79112223344', 'Текст SMS', 'Имя отправителя' );
 
 Статус SMS:
 
     $sms->sms_status( 'SMS id' );
 
-Стоимость SMS (по одному номеру за вызов):
+Стоимость SMS:
 
     $sms->sms_cost( '79112223344', 'Текст SMS' );
 
@@ -62,15 +63,15 @@ PHP-класс для работы с api сервиса [sms.ru](http://sms.ru)
 
 Добавить номер в стоплист:
 
-    $sms->stoplist_add( '79112223344', 'Примечание' );
+	$sms->stoplist_add( '79112223344', 'Примечание' );
 
 Получить номера стоплиста:
 
-    $sms->stoplist_get();
+	$sms->stoplist_get();
 
 Удалить номер из стоп-листа:
 
-    $sms->stoplist_del( '79112223344' );
+	$sms->stoplist_del( '79112223344' );
 
 ## Автор
 
