@@ -1,6 +1,6 @@
 <?php
 
-require_once 'lib/Zelenin/smsru.php';
+require_once 'vendor/autoload.php';
 
 $sms = new \Zelenin\smsru( 'api_id', 'login', 'password' );
 // $sms = new \Zelenin\smsru( 'api_id' );

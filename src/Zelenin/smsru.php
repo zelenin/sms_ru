@@ -6,8 +6,8 @@
  * @package smsru
  * @author  Aleksandr Zelenin <aleksandr@zelenin.me>
  * @link    https://github.com/zelenin/sms_ru
+ * @license MIT
  * @version 1.3.0
- * @license http://opensource.org/licenses/gpl-3.0.html GPL-3.0
  */
 
 namespace Zelenin;

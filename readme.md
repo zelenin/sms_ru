@@ -6,17 +6,17 @@ PHP-класс для работы с api сервиса [sms.ru](http://sms.ru)
 
 Подключение класса:
 
-    require_once 'lib/Zelenin/smsru.php';
+    require_once 'src/Zelenin/smsru.php';
 
-Простая авторизация:
+Простая авторизация (с помощью api_id):
 
     $sms = new \Zelenin\smsru( $api_id );
 
-Усиленная авторизация:
+Усиленная авторизация (с помощью api_id, логина и пароля):
 
     $sms = new \Zelenin\smsru( $api_id, $login, $password );
 
-Усиленная авторизация с логином и паролем:
+Усиленная авторизация (с помощью логина и пароля):
 
 	$sms = new \Zelenin\smsru( null, $login, $password );
 
