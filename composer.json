@@ -1,11 +1,11 @@
 {
 	"name": "zelenin/smsru",
 	"description": "PHP-класс для работы с api сервиса [sms.ru](http://sms.ru)",
-	"version": "1.3.0",
+	"version": "1.4.0",
 	"type": "library",
-	"keywords": ["vkontakte", "vk", "api", "vk.com", "vkontakte.ru"],
+	"keywords": ["sms", "sms.ru"],
 	"homepage": "https://github.com/zelenin/sms_ru",
-	"time": "2013-08-28",
+	"time": "2013-10-31",
 	"license": "MIT",
 	"authors": [
 		{
