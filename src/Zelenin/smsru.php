@@ -179,7 +179,7 @@ class smsru
 			$params['partner_id'] = $partner_id;
 		}
 
-		$result = $this->curl( $url, http_build_query( $params ) );
+		$result = $this->curl( $url, http_build_query( $params, '', '&' ) );
 		$result = explode( "\n", $result );
 
 		$response = array();
