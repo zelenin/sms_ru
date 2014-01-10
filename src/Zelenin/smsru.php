@@ -422,9 +422,9 @@ class smsru
 
 	private function getAnswer( $key, $code )
 	{
-		if ( isset( $this->response_code[$key][$code] ) ) {
-			return $this->response_code[$key][$code];
-		}
+		return isset( $this->response_code[$key][$code] )
+			? $this->response_code[$key][$code]
+			: null;
 	}
 
 	private function curl( $url, $params = array() )
