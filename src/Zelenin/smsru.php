@@ -7,14 +7,14 @@
  * @author  Aleksandr Zelenin <aleksandr@zelenin.me>
  * @link    https://github.com/zelenin/sms_ru
  * @license MIT
- * @version 1.3.1
+ * @version 1.4.0
  */
 
 namespace Zelenin;
 
 class smsru
 {
-	const VERSION = '1.3.1';
+	const VERSION = '1.4.0';
 	const HOST = 'http://sms.ru/';
 	const SEND = 'sms/send?';
 	const STATUS = 'sms/status?';
@@ -146,48 +146,8 @@ class smsru
 
 	public function sms_send( $to, $text, $from = null, $time = null, $translit = false, $test = false, $partner_id = null )
 	{
-		$url = self::HOST . self::SEND;
-		$params = $this->_params;
-		$params['to'] = $to;
-		$params['text'] = $text;
-
-		if ( $from ) {
-			$params['from'] = $from;
-		}
-
-		if ( $time && $time < ( time() + 7 * 60 * 60 * 24 ) ) {
-			$params['time'] = $time;
-		}
-
-		if ( $translit ) {
-			$params['translit'] = 1;
-		}
-
-		if ( $test ) {
-			$params['test'] = 1;
-		}
-
-		if ( $partner_id ) {
-			$params['partner_id'] = $partner_id;
-		}
-
-		$result = $this->curl( $url, $params );
-		$result = explode( "\n", $result );
-
-		$response = array();
-		$response['code'] = $result[0];
-		$response['description'] = $this->getAnswer( 'send', $response['code'] );
-		unset( $result[0] );
-
-		foreach ( $result as $id ) {
-			if ( !preg_match( '/=/', $id ) ) {
-				$response['ids'][] = $id;
-			} else {
-				$result = explode( '=', $id );
-				$response[$result[0]] = $result[1];
-			}
-		}
-		return $response;
+		$messages = array( array( $to, $text ) );
+		return $this->multi_sms_send( $messages, $from, $time, $translit, $test, $partner_id );
 	}
 
 	public function multi_sms_send( $messages, $from = null, $time = null, $translit = false, $test = false, $partner_id = null )
@@ -223,16 +183,17 @@ class smsru
 		$result = explode( "\n", $result );
 
 		$response = array();
-		$response['code'] = $result[0];
+		$response['code'] = array_shift( $result );
 		$response['description'] = $this->getAnswer( 'send', $response['code'] );
-		unset( $result[0] );
 
-		foreach ( $result as $id ) {
-			if ( !preg_match( '/=/', $id ) ) {
-				$response['ids'][] = $id;
-			} else {
-				$result = explode( '=', $id );
-				$response[$result[0]] = $result[1];
+		if ( $response['code'] == 100 ) {
+			foreach ( $result as $id ) {
+				if ( !preg_match( '/=/', $id ) ) {
+					$response['ids'][] = $id;
+				} else {
+					$result = explode( '=', $id );
+					$response[$result[0]] = $result[1];
+				}
 			}
 		}
 		return $response;
@@ -422,9 +383,9 @@ class smsru
 
 	private function getAnswer( $key, $code )
 	{
-		return isset( $this->response_code[$key][$code] )
-			? $this->response_code[$key][$code]
-			: null;
+		if ( isset( $this->response_code[$key][$code] ) ) {
+			return $this->response_code[$key][$code];
+		}
 	}
 
 	private function curl( $url, $params = array() )
