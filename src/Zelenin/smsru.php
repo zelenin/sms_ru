@@ -7,14 +7,14 @@
  * @author  Aleksandr Zelenin <aleksandr@zelenin.me>
  * @link    https://github.com/zelenin/sms_ru
  * @license MIT
- * @version 1.3.0
+ * @version 1.3.1
  */
 
 namespace Zelenin;
 
 class smsru
 {
-	const VERSION = '1.3.0';
+	const VERSION = '1.3.1';
 	const HOST = 'http://sms.ru/';
 	const SEND = 'sms/send?';
 	const STATUS = 'sms/status?';
