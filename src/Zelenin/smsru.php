@@ -7,14 +7,14 @@
  * @author  Aleksandr Zelenin <aleksandr@zelenin.me>
  * @link    https://github.com/zelenin/sms_ru
  * @license MIT
- * @version 1.4.0
+ * @version 1.4.1
  */
 
 namespace Zelenin;
 
 class smsru
 {
-	const VERSION = '1.4.0';
+	const VERSION = '1.4.1';
 	const HOST = 'http://sms.ru/';
 	const SEND = 'sms/send?';
 	const STATUS = 'sms/status?';
@@ -383,9 +383,9 @@ class smsru
 
 	private function getAnswer( $key, $code )
 	{
-		if ( isset( $this->response_code[$key][$code] ) ) {
-			return $this->response_code[$key][$code];
-		}
+		return isset( $this->response_code[$key][$code] )
+			? $this->response_code[$key][$code]
+			: null;
 	}
 
 	private function curl( $url, $params = array() )
