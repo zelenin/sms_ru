@@ -1,6 +1,6 @@
 <?php
 
-require_once 'vendor/autoload.php';
+require_once 'src/smsru.php';
 
 $sms = new \Zelenin\smsru('api_id', 'login', 'password');
 // $sms = new \Zelenin\smsru( 'api_id' );
@@ -39,7 +39,3 @@ $sms = new \Zelenin\smsru('api_id', 'login', 'password');
 // $result = $sms->stoplist_get();
 
 // $result = $sms->stoplist_del( '79112223344' );
-
-echo '<pre>';
-
-print_r($result);

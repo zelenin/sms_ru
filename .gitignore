@@ -1,9 +1,1 @@
 .idea
-.git
-index.php
-cookie.txt
-curl.cookie.txt
-vendor
-composer.lock
-composer.phar
-post.txt

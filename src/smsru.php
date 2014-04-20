@@ -6,14 +6,14 @@
  * @author  Aleksandr Zelenin <aleksandr@zelenin.me>
  * @link    https://github.com/zelenin/sms_ru
  * @license MIT
- * @version 1.4.2
+ * @version 1.4.3
  */
 
 namespace Zelenin;
 
 class smsru
 {
-    const VERSION = '1.4.2';
+    const VERSION = '1.4.3';
     const HOST = 'http://sms.ru/';
     const SEND = 'sms/send?';
     const STATUS = 'sms/status?';
@@ -27,13 +27,13 @@ class smsru
     const DEL = 'stoplist/del?';
     const GET = 'stoplist/get?';
     const UCS = 'sms/ucs?';
-    private $_api_id;
-    private $_login;
-    private $_password;
-    private $_params;
-    private $_token;
-    private $_sha512;
-    protected $response_code = array(
+    private $apiId;
+    private $login;
+    private $password;
+    private $params;
+    private $token;
+    private $sha512;
+    private $response_code = array(
         'send' => array(
             '100' => 'Сообщение принято к отправке. На следующих строчках вы найдете идентификаторы отправленных сообщений в том же порядке, в котором вы указали номера, на которых совершалась отправка.',
             '200' => 'Неправильный api_id',
@@ -131,41 +131,25 @@ class smsru
         'get' => array(
             '100' => 'Запрос обработан. На последующих строчках будут идти номера телефонов, указанных в стоплисте в формате номер;примечание.'
         )
-
     );
 
     public function  __construct($api_id = null, $login = null, $pwd = null)
     {
-        $this->_api_id = $api_id;
-        $this->_login = $login;
-        $this->_password = $pwd;
+        $this->apiId = $api_id;
+        $this->login = $login;
+        $this->password = $pwd;
 
-        $this->_params = $this->getAuthParams();
+        $this->params = $this->getAuthParams();
     }
 
-    public function sms_send(
-        $to,
-        $text,
-        $from = null,
-        $time = null,
-        $translit = false,
-        $test = false,
-        $partner_id = null
-    ) {
+    public function sms_send($to, $text, $from = null, $time = null, $translit = false, $test = false, $partner_id = null) {
         $messages = array(array($to, $text));
         return $this->multi_sms_send($messages, $from, $time, $translit, $test, $partner_id);
     }
 
-    public function multi_sms_send(
-        $messages,
-        $from = null,
-        $time = null,
-        $translit = false,
-        $test = false,
-        $partner_id = null
-    ) {
+    public function multi_sms_send($messages, $from = null, $time = null, $translit = false, $test = false, $partner_id = null) {
         $url = self::HOST . self::SEND;
-        $params = $this->_params;
+        $params = $this->params;
 
         foreach ($messages as $message) {
             $params['multi'][$message[0]] = $message[1];
@@ -191,7 +175,7 @@ class smsru
             $params['partner_id'] = $partner_id;
         }
 
-        $result = $this->curl($url, http_build_query($params));
+        $result = $this->curl($url, http_build_query($params, '', '&'));
         $result = explode("\n", $result);
 
         $response = array();
@@ -213,7 +197,7 @@ class smsru
 
     public function sms_mail($to, $text, $from = null)
     {
-        $mail = $this->_api_id . '@' . self::HOST;
+        $mail = $this->apiId . '@' . self::HOST;
         $subject = isset($from) ? $to . ' from:' . $from : $to;
         $headers = 'Content-Type: text/html; charset=UTF-8';
         return mail($mail, $subject, $text, $headers);
@@ -222,7 +206,7 @@ class smsru
     public function sms_status($id)
     {
         $url = self::HOST . self::STATUS;
-        $params = $this->_params;
+        $params = $this->params;
         $params['id'] = $id;
         $result = $this->curl($url, $params);
 
@@ -235,7 +219,7 @@ class smsru
     public function sms_cost($to, $text)
     {
         $url = self::HOST . self::COST;
-        $params = $this->_params;
+        $params = $this->params;
         $params['to'] = $to;
         $params['text'] = $text;
 
@@ -253,7 +237,7 @@ class smsru
     public function my_balance()
     {
         $url = self::HOST . self::BALANCE;
-        $params = $this->_params;
+        $params = $this->params;
         $result = $this->curl($url, $params);
         $result = explode("\n", $result);
         return array(
@@ -266,7 +250,7 @@ class smsru
     public function my_limit()
     {
         $url = self::HOST . self::LIMIT;
-        $params = $this->_params;
+        $params = $this->params;
         $result = $this->curl($url, $params);
         $result = explode("\n", $result);
         return array(
@@ -280,7 +264,7 @@ class smsru
     public function my_senders()
     {
         $url = self::HOST . self::SENDERS;
-        $params = $this->_params;
+        $params = $this->params;
         $result = $this->curl($url, $params);
         $result = explode("\n", rtrim($result));
 
@@ -297,7 +281,7 @@ class smsru
     public function auth_check()
     {
         $url = self::HOST . self::CHECK;
-        $params = $this->_params;
+        $params = $this->params;
         $result = $this->curl($url, $params);
 
         $response = array();
@@ -309,7 +293,7 @@ class smsru
     public function stoplist_add($stoplist_phone, $stoplist_text)
     {
         $url = self::HOST . self::ADD;
-        $params = $this->_params;
+        $params = $this->params;
         $params['stoplist_phone'] = $stoplist_phone;
         $params['stoplist_text'] = $stoplist_text;
         $result = $this->curl($url, $params);
@@ -323,7 +307,7 @@ class smsru
     public function stoplist_del($stoplist_phone)
     {
         $url = self::HOST . self::DEL;
-        $params = $this->_params;
+        $params = $this->params;
         $params['stoplist_phone'] = $stoplist_phone;
         $result = $this->curl($url, $params);
 
@@ -336,7 +320,7 @@ class smsru
     public function stoplist_get()
     {
         $url = self::HOST . self::GET;
-        $params = $this->_params;
+        $params = $this->params;
         $result = $this->curl($url, $params);
 
         $result = explode("\n", rtrim($result));
@@ -358,7 +342,7 @@ class smsru
     public function sms_ucs()
     {
         $url = self::HOST . self::UCS;
-        $params = $this->_params;
+        $params = $this->params;
         $result = $this->curl($url, $params);
         return $result;
     }
@@ -366,14 +350,14 @@ class smsru
     private function getAuthParams()
     {
         if (!empty($this->login) && !empty($this->pwd)) {
-            $this->_token = $this->authGetToken();
-            $this->_sha512 = $this->getSha512();
+            $this->token = $this->authGetToken();
+            $this->sha512 = $this->getSha512();
 
-            $params['login'] = $this->_login;
-            $params['token'] = $this->_token;
-            $params['sha512'] = $this->_sha512;
+            $params['login'] = $this->login;
+            $params['token'] = $this->token;
+            $params['sha512'] = $this->sha512;
         } else {
-            $params['api_id'] = $this->_api_id;
+            $params['api_id'] = $this->apiId;
         }
         return $params;
     }
@@ -386,11 +370,9 @@ class smsru
 
     private function getSha512()
     {
-        if (!$this->_api_id || empty($this->_api_id)) {
-            return hash('sha512', $this->_password . $this->_token);
-        } else {
-            return hash('sha512', $this->_password . $this->_token . $this->_api_id);
-        }
+        return !$this->apiId || empty($this->apiId)
+            ? hash('sha512', $this->password . $this->token)
+            : hash('sha512', $this->password . $this->token . $this->apiId);
     }
 
     private function getAnswer($key, $code)
