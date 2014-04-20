@@ -2,7 +2,7 @@
 
 require_once 'vendor/autoload.php';
 
-$sms = new \Zelenin\smsru( 'api_id', 'login', 'password' );
+$sms = new \Zelenin\smsru('api_id', 'login', 'password');
 // $sms = new \Zelenin\smsru( 'api_id' );
 // $sms = new \Zelenin\smsru( null, 'login', 'password' );
 
@@ -42,4 +42,4 @@ $sms = new \Zelenin\smsru( 'api_id', 'login', 'password' );
 
 echo '<pre>';
 
-print_r( $result );
+print_r($result);
