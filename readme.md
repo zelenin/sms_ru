@@ -4,10 +4,6 @@ PHP-класс для работы с api сервиса [sms.ru](http://sms.ru)
 
 ## Использование
 
-Подключение класса:
-
-    require_once 'src/Zelenin/smsru.php';
-
 Простая авторизация (с помощью api_id):
 
     $sms = new \Zelenin\smsru( $api_id );
