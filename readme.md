@@ -2,6 +2,24 @@
 
 PHP-класс для работы с api сервиса [sms.ru](http://sms.ru)
 
+## Установка
+
+### Установка через Composer
+
+Запустите
+
+```
+php composer.phar require zelenin/smsru "dev-master"
+```
+
+или добавьте
+
+```js
+"zelenin/smsru": "dev-master"
+```
+
+в секцию require вашего composer.json
+
 ## Использование
 
 Простая авторизация (с помощью api_id):

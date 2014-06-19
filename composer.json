@@ -1,11 +1,11 @@
 {
 	"name": "zelenin/smsru",
 	"description": "PHP-класс для работы с api сервиса [sms.ru](http://sms.ru)",
-	"version": "1.4.3",
+	"version": "1.4.4",
 	"type": "library",
 	"keywords": ["sms", "sms.ru", "api"],
 	"homepage": "https://github.com/zelenin/sms_ru",
-	"time": "2014-04-20",
+	"time": "2014-06-19",
 	"license": "MIT",
 	"authors": [
 		{
