@@ -349,7 +349,7 @@ class smsru
 
     private function getAuthParams()
     {
-        if (!empty($this->login) && !empty($this->pwd)) {
+        if (!empty($this->login) && !empty($this->password)) {
             $this->token = $this->authGetToken();
             $this->sha512 = $this->getSha512();
 
