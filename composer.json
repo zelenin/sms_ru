@@ -1,31 +1,35 @@
 {
-	"name": "zelenin/smsru",
-	"description": "PHP-класс для работы с api сервиса [sms.ru](http://sms.ru)",
-	"version": "2.0.0",
-	"type": "library",
-	"keywords": ["sms", "sms.ru", "api"],
-	"homepage": "https://github.com/zelenin/sms_ru",
-	"time": "2014-10-02",
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "Aleksandr Zelenin",
-			"email": "aleksandr@zelenin.me",
-			"homepage": "http://zelenin.me",
-			"role": "Developer"
-		}
-	],
-	"support": {
-		"issues": "https://github.com/zelenin/sms_ru/issues",
-		"source": "https://github.com/zelenin/sms_ru"
-	},
-	"require": {
-		"php": ">=5.4.0",
+    "name": "zelenin/smsru",
+    "description": "PHP-класс для работы с api сервиса [sms.ru](http://sms.ru)",
+    "version": "2.0.0",
+    "type": "library",
+    "keywords": [
+        "sms",
+        "sms.ru",
+        "api"
+    ],
+    "homepage": "https://github.com/zelenin/sms_ru",
+    "time": "2014-10-02",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aleksandr Zelenin",
+            "email": "aleksandr@zelenin.me",
+            "homepage": "http://zelenin.me",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/zelenin/sms_ru/issues",
+        "source": "https://github.com/zelenin/sms_ru"
+    },
+    "require": {
+        "php": ">=5.4.0",
         "guzzlehttp/guzzle": "4.2.2"
-	},
-	"autoload": {
-		"psr-4": {
-			"Zelenin\\": ""
-		}
-	}
+    },
+    "autoload": {
+        "psr-4": {
+            "Zelenin\\": ""
+        }
+    }
 }
