@@ -1,19 +1,10 @@
 <?php
-/**
- * Class for sms.ru
- *
- * @package smsru
- * @author  Aleksandr Zelenin <aleksandr@zelenin.me>
- * @link    https://github.com/zelenin/sms_ru
- * @license MIT
- * @version 1.4.3
- */
 
 namespace Zelenin;
 
-class smsru
+class Smsru
 {
-    const VERSION = '1.4.3';
+    const VERSION = '2.0.0';
     const HOST = 'http://sms.ru/';
     const SEND = 'sms/send?';
     const STATUS = 'sms/status?';

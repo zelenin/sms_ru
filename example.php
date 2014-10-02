@@ -1,8 +1,8 @@
 <?php
 
-require_once 'src/smsru.php';
+require_once 'Smsru.php';
 
-$sms = new \Zelenin\smsru('api_id', 'login', 'password');
+$sms = new \Zelenin\Smsru('api_id', 'login', 'password');
 // $sms = new \Zelenin\smsru( 'api_id' );
 // $sms = new \Zelenin\smsru( null, 'login', 'password' );
 
