@@ -27,6 +27,5 @@
 		"psr-4": {
 			"Zelenin\\": ""
 		}
-	},
-	"minimum-stability": "stable"
+	}
 }
