@@ -279,12 +279,12 @@ class Smsru
 
     public function authGetToken()
     {
-        return $this->method(static::METHOD_AUTH_GET_TOKEN);
+        return (string) $this->request('http://'.static::API_HOST . '/' .static::METHOD_AUTH_GET_TOKEN);
     }
 
     public function authCheck()
     {
-        $result = $this->method(static::METHOD_AUTH_CHECK, $this->authParams);
+        $result = $this->method(static::METHOD_AUTH_CHECK);
         $response = [];
         $response['code'] = $result;
         $response['description'] = $this->getAnswer('check', $response['code']);
