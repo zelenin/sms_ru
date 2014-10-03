@@ -2,6 +2,7 @@
 
 namespace Zelenin;
 
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Message\Response;
 
@@ -9,31 +10,29 @@ class Smsru
 {
     /** @var Client */
     private $client = null;
-    private $apiId;
-    private $login;
-    private $password;
+    private $apiId = null;
+    private $login = null;
+    private $password = null;
     private $authParams = [];
     private $token;
     private $sha512;
 
-    const VERSION = '2.0.0';
-    const HOST = 'sms.ru';
-    const SEND = 'sms/send';
-    const STATUS = 'sms/status';
-    const COST = 'sms/cost';
-    const BALANCE = 'my/balance';
-    const LIMIT = 'my/limit';
-    const SENDERS = 'my/senders';
-    const GET_TOKEN = 'auth/get_token';
-    const CHECK = 'auth/check';
-    const ADD = 'stoplist/add';
-    const DEL = 'stoplist/del';
-    const GET = 'stoplist/get';
-    const UCS = 'sms/ucs';
+    const API_HOST = 'sms.ru';
+    const METHOD_SMS_SEND = 'sms/send';
+    const METHOD_SMS_STATUS = 'sms/status';
+    const METHOD_SMS_COST = 'sms/cost';
+    const METHOD_MY_BALANCE = 'my/balance';
+    const METHOD_MY_LIMIT = 'my/limit';
+    const METHOD_MY_SENDERS = 'my/senders';
+    const METHOD_AUTH_GET_TOKEN = 'auth/get_token';
+    const METHOD_AUTH_CHECK = 'auth/check';
+    const METHOD_STOPLIST_ADD = 'stoplist/add';
+    const METHOD_STOPLIST_DEL = 'stoplist/del';
+    const METHOD_STOPLIST_GET = 'stoplist/get';
 
     const MAX_TIME = 604800; //7 * 60 * 60 * 24
 
-    private $response_code = [
+    private $responseCode = [
         'send' => [
             '100' => 'Сообщение принято к отправке. На следующих строчках вы найдете идентификаторы отправленных сообщений в том же порядке, в котором вы указали номера, на которых совершалась отправка.',
             '200' => 'Неправильный api_id.',
@@ -133,12 +132,24 @@ class Smsru
         ]
     ];
 
-    public function  __construct($apiId = null, $login = null, $password = null)
+    public function  __construct()    {    }
+
+    public function setApiId($apiId)
     {
         $this->apiId = $apiId;
+        return $this;
+    }
+
+    public function setLogin($login)
+    {
         $this->login = $login;
+        return $this;
+    }
+
+    public function setPassword($password)
+    {
         $this->password = $password;
-        $this->authParams = $this->getAuthParams();
+        return $this;
     }
 
     public function smsSend($to, $text, $from = null, $time = null, $translit = false, $test = false, $partner_id = null) {
@@ -171,7 +182,7 @@ class Smsru
             $params['partner_id'] = $partner_id;
         }
 
-        $result = $this->method(static::SEND, $params);
+        $result = $this->method(static::METHOD_SMS_SEND, $params);
         $result = explode("\n", $result);
 
         $response = [];
@@ -193,8 +204,10 @@ class Smsru
 
     public function smsMail($to, $text, $from = null)
     {
-        $mail = $this->apiId . '@' . static::HOST;
-        $subject = $from ? $to . ' from:' . $from : $to;
+        $mail = $this->apiId . '@' . static::API_HOST;
+        $subject = $from
+            ? $to . ' from:' . $from
+            : $to;
         $headers = 'Content-Type: text/html; charset=UTF-8';
         return mail($mail, $subject, $text, $headers);
     }
@@ -202,7 +215,7 @@ class Smsru
     public function smsStatus($id)
     {
         $params['id'] = $id;
-        $result = $this->method(static::STATUS, $params);
+        $result = $this->method(static::METHOD_SMS_STATUS, $params);
 
         $response = [];
         $response['code'] = $result;
@@ -215,7 +228,7 @@ class Smsru
         $params['to'] = $to;
         $params['text'] = $text;
 
-        $result = $this->method(static::COST, $params);
+        $result = $this->method(static::METHOD_SMS_COST, $params);
         $result = explode("\n", $result);
 
         return [
@@ -228,7 +241,7 @@ class Smsru
 
     public function myBalance()
     {
-        $result = $this->method(static::BALANCE);
+        $result = $this->method(static::METHOD_MY_BALANCE);
         $result = explode("\n", $result);
         return [
             'code' => $result[0],
@@ -237,9 +250,9 @@ class Smsru
         ];
     }
 
-    public function my_limit()
+    public function myLimit()
     {
-        $result = $this->method(static::LIMIT);
+        $result = $this->method(static::METHOD_MY_LIMIT);
         $result = explode("\n", $result);
         return [
             'code' => $result[0],
@@ -249,9 +262,9 @@ class Smsru
         ];
     }
 
-    public function my_senders()
+    public function mySenders()
     {
-        $result = $this->method(static::SENDERS);
+        $result = $this->method(static::METHOD_MY_SENDERS);
         $result = explode("\n", rtrim($result));
 
         $response = [
@@ -264,21 +277,25 @@ class Smsru
         return $response;
     }
 
+    public function authGetToken()
+    {
+        return $this->method(static::METHOD_AUTH_GET_TOKEN);
+    }
+
     public function authCheck()
     {
-        /* todo */
-        $result = $this->method(static::CHECK, $this->authParams);
+        $result = $this->method(static::METHOD_AUTH_CHECK, $this->authParams);
         $response = [];
         $response['code'] = $result;
         $response['description'] = $this->getAnswer('check', $response['code']);
         return $response;
     }
 
-    public function stoplist_add($stoplist_phone, $stoplist_text)
+    public function stoplistAdd($stoplistPhone, $stoplistText)
     {
-        $params['stoplist_phone'] = $stoplist_phone;
-        $params['stoplist_text'] = $stoplist_text;
-        $result = $this->method(static::ADD, $params);
+        $params['stoplist_phone'] = $stoplistPhone;
+        $params['stoplist_text'] = $stoplistText;
+        $result = $this->method(static::METHOD_STOPLIST_ADD, $params);
 
         $response = [];
         $response['code'] = $result;
@@ -286,10 +303,10 @@ class Smsru
         return $response;
     }
 
-    public function stoplist_del($stoplist_phone)
+    public function stoplistDel($stoplistPhone)
     {
-        $params['stoplist_phone'] = $stoplist_phone;
-        $result = $this->method(static::DEL, $params);
+        $params['stoplist_phone'] = $stoplistPhone;
+        $result = $this->method(static::METHOD_STOPLIST_DEL, $params);
 
         $response = [];
         $response['code'] = $result;
@@ -299,7 +316,7 @@ class Smsru
 
     public function stoplistGet()
     {
-        $result = $this->method(static::GET);
+        $result = $this->method(static::METHOD_STOPLIST_GET);
 
         $result = explode("\n", rtrim($result));
         $response = [
@@ -318,48 +335,40 @@ class Smsru
         return $response;
     }
 
-    public function smsUcs()
-    {
-        return  $this->method(static::UCS);
-    }
-
     private function getAuthParams()
     {
-        if (!empty($this->login) && !empty($this->password)) {
+        if ($this->login && $this->password) {
             $this->token = $this->authGetToken();
             $this->sha512 = $this->getSha512();
 
             $params['login'] = $this->login;
             $params['token'] = $this->token;
             $params['sha512'] = $this->sha512;
-        } else {
+        } elseif($this->apiId) {
             $params['api_id'] = $this->apiId;
+        } else {
+            throw new Exception('You should set login/password or api_id');
         }
         return $params;
     }
 
-    private function authGetToken()
-    {
-        return $this->method(static::GET_TOKEN);
-    }
-
     private function getSha512()
     {
-        return !$this->apiId || empty($this->apiId)
-            ? hash('sha512', $this->password . $this->token)
-            : hash('sha512', $this->password . $this->token . $this->apiId);
+        return $this->apiId
+            ? hash('sha512', $this->password . $this->token . $this->apiId)
+            : hash('sha512', $this->password . $this->token);
     }
 
     private function getAnswer($key, $code)
     {
-        return isset($this->response_code[$key][$code])
-            ? $this->response_code[$key][$code]
+        return isset($this->responseCode[$key][$code])
+            ? $this->responseCode[$key][$code]
             : null;
     }
 
     public function method($name,$params = [])
     {
-        return $this->request('http://'.static::HOST . '/' .$name,array_merge($params,$this->authParams));
+        return (string) $this->request('http://'.static::API_HOST . '/' .$name,array_merge($params,$this->getAuthParams()));
     }
 
     private function request($url, $params = [])
@@ -372,7 +381,7 @@ class Smsru
         if ($response->getStatusCode()==200) {
             return $response->getBody();
         } else {
-            throw new \Exception('Sms.ru problem. Status code is ' . $response->getStatusCode(),$response->getStatusCode());
+            throw new Exception('Sms.ru problem. Status code is ' . $response->getStatusCode(),$response->getStatusCode());
         }
     }
 }
