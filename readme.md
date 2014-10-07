@@ -1,12 +1,10 @@
-WIP
-
 # sms_ru
 
 PHP-класс для работы с api сервиса [sms.ru](http://sms.ru)
 
 ## Установка
 
-Внимание: php 5.4+
+Внимание: версия 2.*.* не совместима с 1.*.* и требует php > 5.4
 
 ### Установка через Composer
 
@@ -19,77 +17,111 @@ php composer.phar require zelenin/smsru "dev-master"
 или добавьте
 
 ```js
-"zelenin/smsru": "dev-master"
+"zelenin/smsru": "2.0.*"
 ```
 
-в секцию require вашего composer.json
+в секцию ```require``` вашего composer.json
 
 ## Использование
 
 Простая авторизация (с помощью api_id):
 
-    $sms = new \Zelenin\Smsru( $api_id );
+```php
+$sms = new \Zelenin\Smsru();
+$sms->setApiId($apiId);
+```
 
 Усиленная авторизация (с помощью api_id, логина и пароля):
 
-    $sms = new \Zelenin\Smsru( $api_id, $login, $password );
+```php
+$sms = new \Zelenin\Smsru();
+$sms->setApiId($apiId);
+$sms->setLogin($login);
+$sms->setPassword($password);
+```
 
 Усиленная авторизация (с помощью логина и пароля):
 
-	$sms = new \Zelenin\Smsru( null, $login, $password );
+```php
+$sms = new \Zelenin\Smsru();
+$sms->setLogin($login);
+$sms->setPassword($password);
+```
 
 Отправка SMS:
 
-    $sms->sms_send( '79112223344', 'Текст SMS' );
-	$sms->sms_send( '79112223344,79115556677,79118889900', 'Текст SMS' );
-	$sms->sms_send( '79112223344', 'Текст SMS', 'Имя отправителя', time(), $translit = false, $test = true, $partner_id );
+```php
+$sms->smsSend('79112223344', 'Текст SMS');
+$sms->smsSend('79112223344,79115556677,79118889900', 'Текст SMS');
+$sms->smsSend('79112223344', 'Текст SMS', 'Имя отправителя', time(), $translit = false, $test = true, $partner_id);
 
-	$messages = array(
-		array( '79112223344', 'Текст СМС' ),
-		array( '79115556677', 'Текст СМС' )
-	);
-	$sms->multi_sms_send( $messages, 'Имя отправителя', time(), $translit = false, $test = true, $partner_id );
+$messages = [
+    ['79112223344', 'Текст СМС'],
+    ['79115556677', 'Текст СМС']
+];
+$sms->multiSmsSend($messages, 'Имя отправителя', time(), $translit = false, $test = true, $partner_id);
+```
 
 Отправка SMS через e-mail:
 
-    $sms->sms_mail( '79112223344', 'Текст SMS' );
-	$sms->sms_mail( '79112223344', 'Текст SMS', 'Имя отправителя' );
+```php
+$sms->smsMail('79112223344', 'Текст SMS');
+$sms->smsMail('79112223344', 'Текст SMS', 'Имя отправителя');
+```
 
 Статус SMS:
 
-    $sms->sms_status( 'SMS id' );
+```php
+$sms->smsStatus('SMS id');
+```
 
 Стоимость SMS:
 
-    $sms->sms_cost( '79112223344', 'Текст SMS' );
+```php
+$sms->smsCost('79112223344', 'Текст SMS');
+```
 
 Баланс:
 
-    $sms->my_balance();
+```php
+$sms->myBalance();
+```
 
 Дневной лимит:
 
-    $sms->my_limit();
+```php
+$sms->myLimit();
+```
 
 Отправители:
 
-    $sms->my_senders();
+```php
+$sms->mySenders();
+```
 
 Проверка валидности логина и пароля:
 
-    $sms->auth_check();
+```php
+$sms->authCheck();
+```
 
 Добавить номер в стоплист:
 
-	$sms->stoplist_add( '79112223344', 'Примечание' );
-
-Получить номера стоплиста:
-
-	$sms->stoplist_get();
+```php
+$sms->stoplistAdd('79112223344', 'Примечание');
+```
 
 Удалить номер из стоп-листа:
 
-	$sms->stoplist_del( '79112223344' );
+```php
+$sms->stoplistDel('79112223344');
+```
+
+Получить номера стоплиста:
+
+```php
+$sms->stoplistGet();
+```
 
 ## Автор
 
