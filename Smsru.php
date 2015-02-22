@@ -189,7 +189,7 @@ class Smsru
             'senders' => $result
         ];
         unset($response['senders'][0]);
-        $response['senders'] = array_values($response['my_senders']);
+        $response['senders'] = array_values($response['senders']);
         return $response;
     }
 
