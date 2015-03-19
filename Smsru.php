@@ -390,9 +390,7 @@ class Smsru
 
     private function request($url, $params = [])
     {
-        if (!$this->client) {
-            $this->client = new Client();
-        }
+        $client = $this->getClient();
         /** @var Response $response */
         $response = $this->client->post($url, ['body' => $params]);
         if ($response->getStatusCode() == 200) {
@@ -400,5 +398,14 @@ class Smsru
         } else {
             throw new Exception('Sms.ru problem. Status code is ' . $response->getStatusCode(), $response->getStatusCode());
         }
+    }
+    private function getClient() {
+      if (!$this->client) {
+        $this->setClient(new Client());
+      }
+      return $client;
+    }
+    public function setClient($client) {
+      $this->client = $client;
     }
 }
