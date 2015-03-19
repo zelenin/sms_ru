@@ -403,7 +403,7 @@ class Smsru
       if (!$this->client) {
         $this->setClient(new Client());
       }
-      return $client;
+      return $this->client;
     }
     public function setClient($client) {
       $this->client = $client;
