@@ -74,6 +74,7 @@ class Smsru
         $test = false,
         $partner_id = null
     ) {
+        $params = [];
         foreach ($messages as $message) {
             $params['multi'][$message[0]] = $message[1];
         }
@@ -150,8 +151,8 @@ class Smsru
         return [
             'code' => $result[0],
             'description' => $this->getAnswer(static::METHOD_SMS_COST, $result[0]),
-            'price' => $result[1],
-            'number' => $result[2]
+            'price' => array_key_exists(1, $result) ? $result[1] : null,
+            'number' => array_key_exists(2, $result) ? $result[2] : null
         ];
     }
 
@@ -162,7 +163,7 @@ class Smsru
         return [
             'code' => $result[0],
             'description' => $this->getAnswer(static::METHOD_MY_BALANCE, $result[0]),
-            'balance' => $result[1]
+            'balance' => array_key_exists(1, $result) ? $result[1] : null
         ];
     }
 
@@ -173,8 +174,8 @@ class Smsru
         return [
             'code' => $result[0],
             'description' => $this->getAnswer(static::METHOD_MY_LIMIT, $result[0]),
-            'total' => $result[1],
-            'current' => $result[2]
+            'total' => array_key_exists(1, $result) ? $result[1] : null,
+            'current' => array_key_exists(2, $result) ? $result[2] : null
         ];
     }
 
