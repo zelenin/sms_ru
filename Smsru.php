@@ -74,7 +74,7 @@ class Smsru
         $test = false,
         $partner_id = null
     ) {
-        $params = array();
+        $params = [];
         foreach ($messages as $message) {
             $params['multi'][$message[0]] = $message[1];
         }
