@@ -150,8 +150,8 @@ class Smsru
         return [
             'code' => $result[0],
             'description' => $this->getAnswer(static::METHOD_SMS_COST, $result[0]),
-            'price' => $result[1],
-            'number' => $result[2]
+            'price' => array_key_exists(1, $result) ? $result[1] : null,
+            'number' => array_key_exists(2, $result) ? $result[2] : null
         ];
     }
 
