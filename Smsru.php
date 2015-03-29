@@ -409,4 +409,16 @@ class Smsru
     public function setClient($client) {
       $this->client = $client;
     }
+
+    public function handleCallbackData($data) {
+        $preparedData = [];
+        foreach($data as $blockData) {
+            $lines = explode("\n", $blockData);
+            if ('sms_status' === $lines[0]) {
+                $preparedData[self::METHOD_SMS_STATUS][$lines[1]] =
+                    $this->getAnswer(self::METHOD_SMS_STATUS, $lines[2]);
+            }
+        }
+        return $preparedData;
+    }
 }
