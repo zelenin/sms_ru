@@ -414,9 +414,15 @@ class Smsru
         $preparedData = [];
         foreach($data as $blockData) {
             $lines = explode("\n", $blockData);
-            if ('sms_status' === $lines[0]) {
-                $preparedData[self::METHOD_SMS_STATUS][$lines[1]] =
-                    $this->getAnswer(self::METHOD_SMS_STATUS, $lines[2]);
+            if (array_key_exists(0, $lines)) {
+                switch(trim($lines[0])) {
+                    case 'sms_status':
+                        if (array_key_exists(1, $lines) && array_key_exists(2, $lines)) {
+                            $preparedData[self::METHOD_SMS_STATUS][$lines[1]] =
+                                $this->getAnswer(self::METHOD_SMS_STATUS, $lines[2]);
+                        }
+                        break;
+                }
             }
         }
         return $preparedData;
