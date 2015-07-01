@@ -4,8 +4,6 @@ PHP-класс для работы с api сервиса [sms.ru](http://sms.ru)
 
 ## Установка
 
-Внимание: версия ```2.*.*``` не совместима с ```1.*.*``` и требует ```php >= 5.4```
-
 ### Установка через Composer
 
 Запустите
@@ -17,7 +15,7 @@ php composer.phar require zelenin/smsru "dev-master"
 или добавьте
 
 ```js
-"zelenin/smsru": "2.0.*"
+"zelenin/smsru": "~3"
 ```
 
 в секцию ```require``` вашего composer.json

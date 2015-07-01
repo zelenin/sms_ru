@@ -4,7 +4,7 @@ namespace Zelenin;
 
 use Exception;
 use GuzzleHttp\Client;
-use GuzzleHttp\Message\Response;
+use GuzzleHttp\Psr7\Response;
 
 class Smsru
 {
@@ -393,7 +393,7 @@ class Smsru
     {
         $client = $this->getClient();
         /** @var Response $response */
-        $response = $this->client->post($url, ['body' => $params]);
+        $response = $client->post($url, ['query' => $params]);
         if ($response->getStatusCode() == 200) {
             return $response->getBody();
         } else {
@@ -406,6 +406,7 @@ class Smsru
       }
       return $this->client;
     }
+
     public function setClient($client) {
       $this->client = $client;
     }
