@@ -8,12 +8,34 @@ use GuzzleHttp\Psr7\Response;
 
 class Smsru
 {
-    /** @var Client */
+    /**
+     * @var Client
+     */
     private $client = null;
+
+    /**
+     * @var string
+     */
     private $apiId = null;
+
+    /**
+     * @var string
+     */
     private $login = null;
+
+    /**
+     * @var string
+     */
     private $password = null;
+
+    /**
+     * @var string
+     */
     private $token;
+
+    /**
+     * @var string
+     */
     private $sha512;
 
     const API_HOST = 'sms.ru';
@@ -35,24 +57,50 @@ class Smsru
     {
     }
 
+    /**
+     * @param $apiId
+     *
+     * @return $this
+     */
     public function setApiId($apiId)
     {
         $this->apiId = $apiId;
         return $this;
     }
 
+    /**
+     * @param $login
+     *
+     * @return $this
+     */
     public function setLogin($login)
     {
         $this->login = $login;
         return $this;
     }
 
+    /**
+     * @param $password
+     *
+     * @return $this
+     */
     public function setPassword($password)
     {
         $this->password = $password;
         return $this;
     }
 
+    /**
+     * @param $to
+     * @param $text
+     * @param null $from
+     * @param null $time
+     * @param bool $translit
+     * @param bool $test
+     * @param null $partner_id
+     *
+     * @return array
+     */
     public function smsSend(
         $to,
         $text,
@@ -66,6 +114,16 @@ class Smsru
         return $this->multiSmsSend($messages, $from, $time, $translit, $test, $partner_id);
     }
 
+    /**
+     * @param $messages
+     * @param null $from
+     * @param null $time
+     * @param bool $translit
+     * @param bool $test
+     * @param null $partner_id
+     *
+     * @return array
+     */
     public function multiSmsSend(
         $messages,
         $from = null,
@@ -119,6 +177,13 @@ class Smsru
         return $response;
     }
 
+    /**
+     * @param $to
+     * @param $text
+     * @param null $from
+     *
+     * @return bool
+     */
     public function smsMail($to, $text, $from = null)
     {
         $mail = $this->apiId . '@' . static::API_HOST;
@@ -129,6 +194,11 @@ class Smsru
         return mail($mail, $subject, $text, $headers);
     }
 
+    /**
+     * @param $id
+     *
+     * @return array
+     */
     public function smsStatus($id)
     {
         $params['id'] = $id;
@@ -140,6 +210,12 @@ class Smsru
         return $response;
     }
 
+    /**
+     * @param $to
+     * @param $text
+     *
+     * @return array
+     */
     public function smsCost($to, $text)
     {
         $params['to'] = $to;
@@ -156,6 +232,9 @@ class Smsru
         ];
     }
 
+    /**
+     * @return array
+     */
     public function myBalance()
     {
         $result = $this->method(static::METHOD_MY_BALANCE);
@@ -167,6 +246,9 @@ class Smsru
         ];
     }
 
+    /**
+     * @return array
+     */
     public function myLimit()
     {
         $result = $this->method(static::METHOD_MY_LIMIT);
@@ -179,6 +261,9 @@ class Smsru
         ];
     }
 
+    /**
+     * @return array
+     */
     public function mySenders()
     {
         $result = $this->method(static::METHOD_MY_SENDERS);
@@ -194,11 +279,19 @@ class Smsru
         return $response;
     }
 
+    /**
+     * @return string
+     *
+     * @throws Exception
+     */
     public function authGetToken()
     {
         return (string)$this->request('http://' . static::API_HOST . '/' . static::METHOD_AUTH_GET_TOKEN);
     }
 
+    /**
+     * @return array
+     */
     public function authCheck()
     {
         $result = $this->method(static::METHOD_AUTH_CHECK);
@@ -208,6 +301,12 @@ class Smsru
         return $response;
     }
 
+    /**
+     * @param $stoplistPhone
+     * @param $stoplistText
+     *
+     * @return array
+     */
     public function stoplistAdd($stoplistPhone, $stoplistText)
     {
         $params['stoplist_phone'] = $stoplistPhone;
@@ -220,6 +319,11 @@ class Smsru
         return $response;
     }
 
+    /**
+     * @param $stoplistPhone
+     *
+     * @return array
+     */
     public function stoplistDel($stoplistPhone)
     {
         $params['stoplist_phone'] = $stoplistPhone;
@@ -231,6 +335,9 @@ class Smsru
         return $response;
     }
 
+    /**
+     * @return array
+     */
     public function stoplistGet()
     {
         $result = $this->method(static::METHOD_STOPLIST_GET);
@@ -252,6 +359,11 @@ class Smsru
         return $response;
     }
 
+    /**
+     * @return mixed
+     *
+     * @throws Exception
+     */
     private function getAuthParams()
     {
         if ($this->login && $this->password) {
@@ -269,6 +381,9 @@ class Smsru
         return $params;
     }
 
+    /**
+     * @return string
+     */
     private function getSha512()
     {
         return $this->apiId
@@ -276,6 +391,12 @@ class Smsru
             : hash('sha512', $this->password . $this->token);
     }
 
+    /**
+     * @param $key
+     * @param $code
+     *
+     * @return null
+     */
     private function getAnswer($key, $code)
     {
         $responseCode = [
@@ -384,11 +505,27 @@ class Smsru
             : null;
     }
 
+    /**
+     * @param $name
+     * @param array $params
+     *
+     * @return string
+     *
+     * @throws Exception
+     */
     public function method($name, $params = [])
     {
         return (string)$this->request('http://' . static::API_HOST . '/' . $name, array_merge($params, $this->getAuthParams()));
     }
 
+    /**
+     * @param $url
+     * @param array $params
+     *
+     * @return \GuzzleHttp\Psr7\Stream|\Psr\Http\Message\StreamInterface
+     *
+     * @throws Exception
+     */
     private function request($url, $params = [])
     {
         $client = $this->getClient();
@@ -400,14 +537,23 @@ class Smsru
             throw new Exception('Sms.ru problem. Status code is ' . $response->getStatusCode(), $response->getStatusCode());
         }
     }
-    private function getClient() {
-      if (!$this->client) {
-        $this->setClient(new Client());
-      }
-      return $this->client;
+
+    /**
+     * @return Client
+     */
+    private function getClient()
+    {
+        if (!$this->client) {
+            $this->setClient(new Client());
+        }
+        return $this->client;
     }
 
-    public function setClient($client) {
-      $this->client = $client;
+    /**
+     * @param $client
+     */
+    public function setClient($client)
+    {
+        $this->client = $client;
     }
 }

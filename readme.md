@@ -9,7 +9,7 @@ PHP-класс для работы с api сервиса [sms.ru](http://sms.ru)
 Запустите
 
 ```
-php composer.phar require zelenin/smsru "dev-master"
+php composer.phar require zelenin/smsru "~3"
 ```
 
 или добавьте
