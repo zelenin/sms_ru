@@ -4,18 +4,22 @@ PHP-класс для работы с api сервиса [sms.ru](http://sms.ru)
 
 ## Установка
 
+### Предупреждение
+
+Версия 4 имеет отличное от предыдущих версий API.
+
 ### Установка через Composer
 
 Запустите
 
 ```
-php composer.phar require zelenin/smsru "~3"
+php composer.phar require zelenin/smsru "~4"
 ```
 
 или добавьте
 
 ```js
-"zelenin/smsru": "~3"
+"zelenin/smsru": "~4"
 ```
 
 в секцию ```require``` вашего composer.json
@@ -25,58 +29,44 @@ php composer.phar require zelenin/smsru "~3"
 Простая авторизация (с помощью api_id):
 
 ```php
-$sms = new \Zelenin\Smsru();
-$sms->setApiId($apiId);
+$client = new \Zelenin\SmsRu\Api(new \Zelenin\SmsRu\Auth\ApiIdAuth($apiId));
 ```
 
 Усиленная авторизация (с помощью api_id, логина и пароля):
 
 ```php
-$sms = new \Zelenin\Smsru();
-$sms->setApiId($apiId);
-$sms->setLogin($login);
-$sms->setPassword($password);
+$client = new \Zelenin\SmsRu\Api(new \Zelenin\SmsRu\Auth\LoginPasswordSecureAuth($login, $password, $apiId));
 ```
 
 Усиленная авторизация (с помощью логина и пароля):
 
 ```php
-$sms = new \Zelenin\Smsru();
-$sms->setLogin($login);
-$sms->setPassword($password);
+$client = new \Zelenin\SmsRu\Api(new \Zelenin\SmsRu\Auth\LoginPasswordAuth($login, $password));
 ```
 
 Отправка SMS:
 
 ```php
-$sms->smsSend('79112223344', 'Текст SMS');
-$sms->smsSend('79112223344,79115556677,79118889900', 'Текст SMS');
-$sms->smsSend('79112223344', 'Текст SMS', 'Имя отправителя', time(), $translit = false, $test = true, $partner_id);
+$sms1 = new \Zelenin\SmsRu\Entity\Sms($phone1, $text1);
+$sms1->translit = 1;
+$sms2 = new \Zelenin\SmsRu\Entity\Sms($phone2, $text2);
 
-$messages = [
-    ['79112223344', 'Текст СМС'],
-    ['79115556677', 'Текст СМС']
-];
-$sms->multiSmsSend($messages, 'Имя отправителя', time(), $translit = false, $test = true, $partner_id);
-```
+$client->smsSend($sms1);
+$client->smsSend($sms2);
 
-Отправка SMS через e-mail:
-
-```php
-$sms->smsMail('79112223344', 'Текст SMS');
-$sms->smsMail('79112223344', 'Текст SMS', 'Имя отправителя');
+$client->smsSend(new \Zelenin\SmsRu\Entity\SmsPool([$sms1, $sms2]));
 ```
 
 Статус SMS:
 
 ```php
-$sms->smsStatus('SMS id');
+$sms->smsStatus($smsId);
 ```
 
 Стоимость SMS:
 
 ```php
-$sms->smsCost('79112223344', 'Текст SMS');
+$sms->smsCost(new \Zelenin\SmsRu\Entity\Sms($phone, $text));
 ```
 
 Баланс:
@@ -106,13 +96,13 @@ $sms->authCheck();
 Добавить номер в стоплист:
 
 ```php
-$sms->stoplistAdd('79112223344', 'Примечание');
+$sms->stoplistAdd($phone, $text);
 ```
 
 Удалить номер из стоп-листа:
 
 ```php
-$sms->stoplistDel('79112223344');
+$sms->stoplistDel($phone);
 ```
 
 Получить номера стоплиста:
