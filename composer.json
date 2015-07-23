@@ -22,7 +22,7 @@
         "source": "https://github.com/zelenin/sms_ru"
     },
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.5.0",
         "guzzlehttp/guzzle": "~6"
     },
     "autoload": {
