@@ -60,55 +60,55 @@ $client->smsSend(new \Zelenin\SmsRu\Entity\SmsPool([$sms1, $sms2]));
 Статус SMS:
 
 ```php
-$sms->smsStatus($smsId);
+$client->smsStatus($smsId);
 ```
 
 Стоимость SMS:
 
 ```php
-$sms->smsCost(new \Zelenin\SmsRu\Entity\Sms($phone, $text));
+$client->smsCost(new \Zelenin\SmsRu\Entity\Sms($phone, $text));
 ```
 
 Баланс:
 
 ```php
-$sms->myBalance();
+$client->myBalance();
 ```
 
 Дневной лимит:
 
 ```php
-$sms->myLimit();
+$client->myLimit();
 ```
 
 Отправители:
 
 ```php
-$sms->mySenders();
+$client->mySenders();
 ```
 
 Проверка валидности логина и пароля:
 
 ```php
-$sms->authCheck();
+$client->authCheck();
 ```
 
 Добавить номер в стоплист:
 
 ```php
-$sms->stoplistAdd($phone, $text);
+$client->stoplistAdd($phone, $text);
 ```
 
 Удалить номер из стоп-листа:
 
 ```php
-$sms->stoplistDel($phone);
+$client->stoplistDel($phone);
 ```
 
 Получить номера стоплиста:
 
 ```php
-$sms->stoplistGet();
+$client->stoplistGet();
 ```
 
 ## Автор
