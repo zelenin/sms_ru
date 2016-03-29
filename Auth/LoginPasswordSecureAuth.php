@@ -25,6 +25,11 @@ class LoginPasswordSecureAuth extends AbstractAuth
     private $apiId;
 
     /**
+     * @var string
+     */
+    public $tokenClass = 'Zelenin\SmsRu\Auth\Token';
+
+    /**
      * @param string $login
      * @param string $password
      * @param null|string $apiId
@@ -46,7 +51,7 @@ class LoginPasswordSecureAuth extends AbstractAuth
         return [
             'login' => $this->login,
             'token' => $token,
-            'sha512' => $this->apiId
+            'sha512' => !empty($this->apiId)
                 ? hash('sha512', $this->password . $token . $this->apiId)
                 : hash('sha512', $this->password . $token),
         ];
@@ -65,8 +70,9 @@ class LoginPasswordSecureAuth extends AbstractAuth
      */
     protected function authGetToken()
     {
-        return $this->getContext()
-            ->getClient()
-            ->request('auth/get_token');
+        return call_user_func(
+            [$this->tokenClass, 'get'],
+            $this->getContext()
+        );
     }
 }
