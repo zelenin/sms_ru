@@ -4,6 +4,10 @@ namespace Zelenin\SmsRu\Auth;
 
 use Zelenin\SmsRu\Api;
 
+/**
+ * Interface AuthInterface
+ * @package Zelenin\SmsRu\Auth
+ */
 interface AuthInterface
 {
     /**

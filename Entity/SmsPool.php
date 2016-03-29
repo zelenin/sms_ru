@@ -2,8 +2,13 @@
 
 namespace Zelenin\SmsRu\Entity;
 
+/**
+ * Class SmsPool
+ * @package Zelenin\SmsRu\Entity
+ */
 class SmsPool extends AbstractSms
 {
+
     /**
      * @var Sms[]
      */

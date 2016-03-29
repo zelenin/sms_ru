@@ -2,6 +2,10 @@
 
 namespace Zelenin\SmsRu\Auth;
 
+/**
+ * Class LoginPasswordAuth
+ * @package Zelenin\SmsRu\Auth
+ */
 class LoginPasswordAuth extends AbstractAuth
 {
     /**
@@ -31,7 +35,7 @@ class LoginPasswordAuth extends AbstractAuth
     {
         return [
             'login' => $this->login,
-            'password' => $this->password
+            'password' => $this->password,
         ];
     }
 }

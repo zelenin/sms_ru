@@ -4,8 +4,13 @@ namespace Zelenin\SmsRu\Auth;
 
 use Zelenin\SmsRu\Api;
 
+/**
+ * Class AbstractAuth
+ * @package Zelenin\SmsRu\Auth
+ */
 abstract class AbstractAuth implements AuthInterface
 {
+
     /**
      * @var Api
      */

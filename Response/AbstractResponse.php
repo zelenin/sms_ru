@@ -2,8 +2,13 @@
 
 namespace Zelenin\SmsRu\Response;
 
+/**
+ * Class AbstractResponse
+ * @package Zelenin\SmsRu\Response
+ */
 class AbstractResponse
 {
+
     /**
      * @var string
      */
@@ -27,9 +32,8 @@ class AbstractResponse
      */
     public function getDescription()
     {
-        if (isset($this->availableDescriptions[$this->code])) {
-            return $this->availableDescriptions[$this->code];
-        }
-        return null;
+        return isset($this->availableDescriptions[$this->code])
+            ? $this->availableDescriptions[$this->code]
+            : null;
     }
 }

@@ -2,8 +2,13 @@
 
 namespace Zelenin\SmsRu\Auth;
 
+/**
+ * Class LoginPasswordSecureAuth
+ * @package Zelenin\SmsRu\Auth
+ */
 class LoginPasswordSecureAuth extends AbstractAuth
 {
+
     /**
      * @var string
      */
@@ -37,25 +42,31 @@ class LoginPasswordSecureAuth extends AbstractAuth
     public function getAuthParams()
     {
         $token = $this->authGetToken();
+
         return [
             'login' => $this->login,
             'token' => $token,
             'sha512' => $this->apiId
                 ? hash('sha512', $this->password . $token . $this->apiId)
-                : hash('sha512', $this->password . $token)
+                : hash('sha512', $this->password . $token),
         ];
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getApiId()
+    {
+        return $this->apiId;
     }
 
     /**
      * @return string
      */
-    private function authGetToken()
+    protected function authGetToken()
     {
-        return $this->getContext()->getClient()->request('auth/get_token');
-    }
-
-    public function getApiId()
-    {
-        return $this->apiId;
+        return $this->getContext()
+            ->getClient()
+            ->request('auth/get_token');
     }
 }

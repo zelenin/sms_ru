@@ -2,8 +2,13 @@
 
 namespace Zelenin\SmsRu\Auth;
 
+/**
+ * Class ApiIdAuth
+ * @package Zelenin\SmsRu\Auth
+ */
 class ApiIdAuth extends AbstractAuth
 {
+
     /**
      * @var string
      */
@@ -23,7 +28,7 @@ class ApiIdAuth extends AbstractAuth
     public function getAuthParams()
     {
         return [
-            'api_id' => $this->apiId
+            'api_id' => $this->apiId,
         ];
     }
 

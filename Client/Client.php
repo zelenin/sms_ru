@@ -4,8 +4,13 @@ namespace Zelenin\SmsRu\Client;
 
 use Zelenin\SmsRu\Exception\Exception;
 
+/**
+ * Class Client
+ * @package Zelenin\SmsRu\Client
+ */
 class Client implements ClientInterface
 {
+
     /**
      * @var string
      */
@@ -21,12 +26,14 @@ class Client implements ClientInterface
      */
     public function request($method, $params = [])
     {
-        $client = new \GuzzleHttp\Client();
-        $response = $client->post($this->getUrl($method), ['query' => $params]);
-        if ($response->getStatusCode() == 200) {
-            return (string)$response->getBody();
+        $Client = new \GuzzleHttp\Client();
+
+        $Response = $Client->post($this->getUrl($method), ['query' => $params]);
+
+        if ($Response->getStatusCode() === 200) {
+            return (string)$Response->getBody();
         } else {
-            throw new Exception('Sms.ru problem. Status code is ' . $response->getStatusCode(), $response->getStatusCode());
+            throw new Exception(sprintf('Sms.ru problem. Status code is %s', $Response->getStatusCode()), $Response->getStatusCode());
         }
     }
 
@@ -35,7 +42,7 @@ class Client implements ClientInterface
      *
      * @return string
      */
-    private function getUrl($method)
+    protected function getUrl($method)
     {
         return strtr($this->baseUrl, ['{method}' => $method]);
     }
