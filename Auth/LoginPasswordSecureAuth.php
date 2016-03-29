@@ -2,6 +2,8 @@
 
 namespace Zelenin\SmsRu\Auth;
 
+use Zelenin\SmsRu\Cache\CacheInterface;
+
 class LoginPasswordSecureAuth extends AbstractAuth
 {
 
@@ -21,20 +23,27 @@ class LoginPasswordSecureAuth extends AbstractAuth
     private $apiId;
 
     /**
+     * @var CacheInterface|null
+     */
+    public $Cache;
+
+    /**
      * @var string
      */
-    public $tokenClass = 'Zelenin\SmsRu\Auth\Token';
+    public $cacheKey = 'zelenin.smsru.auth.token';
 
     /**
      * @param string $login
      * @param string $password
      * @param null|string $apiId
+     * @param CacheInterface|null $Cache
      */
-    public function __construct($login, $password, $apiId = null)
+    public function __construct($login, $password, $apiId = null, CacheInterface $Cache = null)
     {
         $this->login = $login;
         $this->password = $password;
         $this->apiId = $apiId;
+        $this->Cache = $Cache;
     }
 
     /**
@@ -64,11 +73,30 @@ class LoginPasswordSecureAuth extends AbstractAuth
     /**
      * @return string
      */
-    protected function authGetToken()
+    public function authGetToken()
     {
-        return call_user_func(
-            [$this->tokenClass, 'get'],
-            $this->getContext()
-        );
+        $Cache = $this->Cache;
+
+        if (empty($Cache)) {
+            $result = $this->requestAuthToken();
+        } elseif ($Cache->exists($this->cacheKey)) {
+            $result = $Cache->get($this->cacheKey);
+        } else {
+            $result = $this->requestAuthToken();
+
+            $Cache->set($this->cacheKey, $result, 60 * 9);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return string
+     */
+    protected function requestAuthToken()
+    {
+        return $this->getContext()
+            ->getClient()
+            ->request('auth/get_token');
     }
 }
