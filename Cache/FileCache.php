@@ -17,7 +17,7 @@ class FileCache implements CacheInterface
     public function __construct($path = null)
     {
         $this->path = $path = empty($path)
-            ? implode(DIRECTORY_SEPARATOR, [__DIR__, '..', 'runtime', 'cache'])
+            ? implode(DIRECTORY_SEPARATOR, [sys_get_temp_dir(), 'cache'])
             : $path;
 
         if (!is_dir($path)) {

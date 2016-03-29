@@ -22,14 +22,14 @@ class Client implements ClientInterface
      */
     public function request($method, $params = [])
     {
-        $Client = new \GuzzleHttp\Client();
+        $client = new \GuzzleHttp\Client();
 
-        $Response = $Client->post($this->getUrl($method), ['query' => $params]);
+        $response = $client->post($this->getUrl($method), ['query' => $params]);
 
-        if ($Response->getStatusCode() === 200) {
-            return (string)$Response->getBody();
+        if ($response->getStatusCode() === 200) {
+            return (string)$response->getBody();
         } else {
-            throw new Exception(sprintf('Sms.ru problem. Status code is %s', $Response->getStatusCode()), $Response->getStatusCode());
+            throw new Exception(sprintf('Sms.ru problem. Status code is %s', $response->getStatusCode()), $response->getStatusCode());
         }
     }
 
@@ -38,7 +38,7 @@ class Client implements ClientInterface
      *
      * @return string
      */
-    protected function getUrl($method)
+    private function getUrl($method)
     {
         return strtr($this->baseUrl, ['{method}' => $method]);
     }

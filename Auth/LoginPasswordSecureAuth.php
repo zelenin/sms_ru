@@ -73,7 +73,7 @@ class LoginPasswordSecureAuth extends AbstractAuth
     /**
      * @return string
      */
-    protected function authGetToken()
+    public function authGetToken()
     {
         $cache = $this->cache;
 
@@ -93,7 +93,7 @@ class LoginPasswordSecureAuth extends AbstractAuth
     /**
      * @return string
      */
-    protected function requestAuthToken()
+    private function requestAuthToken()
     {
         return $this->getContext()
             ->getClient()
