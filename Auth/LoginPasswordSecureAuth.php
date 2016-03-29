@@ -25,25 +25,25 @@ class LoginPasswordSecureAuth extends AbstractAuth
     /**
      * @var CacheInterface|null
      */
-    public $Cache;
+    private $cache;
 
     /**
      * @var string
      */
-    public $cacheKey = 'zelenin.smsru.auth.token';
+    private $cacheKey = 'zelenin.smsru.auth.token';
 
     /**
      * @param string $login
      * @param string $password
      * @param null|string $apiId
-     * @param CacheInterface|null $Cache
+     * @param CacheInterface|null $cache
      */
-    public function __construct($login, $password, $apiId = null, CacheInterface $Cache = null)
+    public function __construct($login, $password, $apiId = null, CacheInterface $cache = null)
     {
         $this->login = $login;
         $this->password = $password;
         $this->apiId = $apiId;
-        $this->Cache = $Cache;
+        $this->cache = $cache;
     }
 
     /**
@@ -75,16 +75,16 @@ class LoginPasswordSecureAuth extends AbstractAuth
      */
     protected function authGetToken()
     {
-        $Cache = $this->Cache;
+        $cache = $this->cache;
 
-        if (empty($Cache)) {
+        if (empty($cache)) {
             $result = $this->requestAuthToken();
-        } elseif ($Cache->exists($this->cacheKey)) {
-            $result = $Cache->get($this->cacheKey);
+        } elseif ($cache->exists($this->cacheKey)) {
+            $result = $cache->get($this->cacheKey);
         } else {
             $result = $this->requestAuthToken();
 
-            $Cache->set($this->cacheKey, $result, 60 * 9);
+            $cache->set($this->cacheKey, $result, 60 * 9);
         }
 
         return $result;
