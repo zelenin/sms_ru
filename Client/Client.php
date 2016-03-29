@@ -4,10 +4,6 @@ namespace Zelenin\SmsRu\Client;
 
 use Zelenin\SmsRu\Exception\Exception;
 
-/**
- * Class Client
- * @package Zelenin\SmsRu\Client
- */
 class Client implements ClientInterface
 {
 

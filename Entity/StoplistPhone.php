@@ -2,10 +2,6 @@
 
 namespace Zelenin\SmsRu\Entity;
 
-/**
- * Class StoplistPhone
- * @package Zelenin\SmsRu\Entity
- */
 class StoplistPhone
 {
 

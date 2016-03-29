@@ -2,10 +2,6 @@
 
 namespace Zelenin\SmsRu\Response;
 
-/**
- * Class SmsStatusResponse
- * @package Zelenin\SmsRu\Response
- */
 class SmsStatusResponse extends AbstractResponse
 {
 

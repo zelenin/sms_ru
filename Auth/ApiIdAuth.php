@@ -2,10 +2,6 @@
 
 namespace Zelenin\SmsRu\Auth;
 
-/**
- * Class ApiIdAuth
- * @package Zelenin\SmsRu\Auth
- */
 class ApiIdAuth extends AbstractAuth
 {
 

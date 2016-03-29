@@ -2,10 +2,6 @@
 
 namespace Zelenin\SmsRu\Auth;
 
-/**
- * Class LoginPasswordSecureAuth
- * @package Zelenin\SmsRu\Auth
- */
 class LoginPasswordSecureAuth extends AbstractAuth
 {
 

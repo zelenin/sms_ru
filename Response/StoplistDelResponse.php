@@ -2,10 +2,6 @@
 
 namespace Zelenin\SmsRu\Response;
 
-/**
- * Class StoplistDelResponse
- * @package Zelenin\SmsRu\Response
- */
 class StoplistDelResponse extends AbstractResponse
 {
 

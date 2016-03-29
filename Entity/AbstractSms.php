@@ -2,10 +2,6 @@
 
 namespace Zelenin\SmsRu\Entity;
 
-/**
- * Class AbstractSms
- * @package Zelenin\SmsRu\Entity
- */
 abstract class AbstractSms
 {
 

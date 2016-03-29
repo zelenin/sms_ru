@@ -2,10 +2,6 @@
 
 namespace Zelenin\SmsRu\Response;
 
-/**
- * Class AuthCheckResponse
- * @package Zelenin\SmsRu\Response
- */
 class AuthCheckResponse extends AbstractResponse
 {
 

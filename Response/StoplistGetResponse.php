@@ -4,10 +4,6 @@ namespace Zelenin\SmsRu\Response;
 
 use Zelenin\SmsRu\Entity\StoplistPhone;
 
-/**
- * Class StoplistGetResponse
- * @package Zelenin\SmsRu\Response
- */
 class StoplistGetResponse extends AbstractResponse
 {
 

@@ -21,10 +21,6 @@ use Zelenin\SmsRu\Response\StoplistAddResponse;
 use Zelenin\SmsRu\Response\StoplistDelResponse;
 use Zelenin\SmsRu\Response\StoplistGetResponse;
 
-/**
- * Class Api
- * @package Zelenin\SmsRu
- */
 class Api
 {
     /**

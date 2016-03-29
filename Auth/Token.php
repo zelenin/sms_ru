@@ -1,18 +1,9 @@
 <?php
-/**
- * Token.php
- * @author Revin Roman
- * @link https://rmrevin.com
- */
 
 namespace Zelenin\SmsRu\Auth;
 
 use Zelenin\SmsRu\Api;
 
-/**
- * Class Token
- * @package Zelenin\SmsRu\Auth
- */
 class Token
 {
 
