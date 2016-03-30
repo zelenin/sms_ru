@@ -4,6 +4,7 @@ namespace Zelenin\SmsRu\Entity;
 
 class StoplistPhone
 {
+
     /**
      * @var string
      */

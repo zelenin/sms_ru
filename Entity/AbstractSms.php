@@ -4,6 +4,7 @@ namespace Zelenin\SmsRu\Entity;
 
 abstract class AbstractSms
 {
+
     /**
      * @var string
      */

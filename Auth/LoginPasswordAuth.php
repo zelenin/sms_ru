@@ -31,7 +31,7 @@ class LoginPasswordAuth extends AbstractAuth
     {
         return [
             'login' => $this->login,
-            'password' => $this->password
+            'password' => $this->password,
         ];
     }
 }

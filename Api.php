@@ -100,6 +100,7 @@ class Api
 //                }
             }
         }
+
         return $smsResponse;
     }
 
@@ -111,8 +112,9 @@ class Api
     public function smsStatus($id)
     {
         $response = $this->request('sms/status', [
-            'id' => $id
+            'id' => $id,
         ]);
+
         $response = explode("\n", $response);
 
         return new SmsStatusResponse(array_shift($response));
@@ -127,8 +129,9 @@ class Api
     {
         $params = [
             'to' => $sms->to,
-            'text' => $sms->text
+            'text' => $sms->text,
         ];
+
         $response = $this->request('sms/cost', $params);
         $response = explode("\n", $response);
 
@@ -208,8 +211,9 @@ class Api
     {
         $response = $this->request('stoplist/add', [
             'stoplist_phone' => $stoplistPhone,
-            'stoplist_text' => $stoplistText
+            'stoplist_text' => $stoplistText,
         ]);
+
         $response = explode("\n", $response);
 
         return new StoplistAddResponse(array_shift($response));
@@ -223,8 +227,9 @@ class Api
     public function stoplistDel($stoplistPhone)
     {
         $response = $this->request('stoplist/del', [
-            'stoplist_phone' => $stoplistPhone
+            'stoplist_phone' => $stoplistPhone,
         ]);
+
         $response = explode("\n", $response);
 
         return new StoplistDelResponse(array_shift($response));
@@ -267,6 +272,7 @@ class Api
         if ($this->client === null) {
             $this->client = new Client();
         }
+
         return $this->client;
     }
 

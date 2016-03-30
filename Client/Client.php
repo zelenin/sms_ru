@@ -6,6 +6,7 @@ use Zelenin\SmsRu\Exception\Exception;
 
 class Client implements ClientInterface
 {
+
     /**
      * @var string
      */
@@ -22,11 +23,13 @@ class Client implements ClientInterface
     public function request($method, $params = [])
     {
         $client = new \GuzzleHttp\Client();
+
         $response = $client->post($this->getUrl($method), ['query' => $params]);
-        if ($response->getStatusCode() == 200) {
+
+        if ($response->getStatusCode() === 200) {
             return (string)$response->getBody();
         } else {
-            throw new Exception('Sms.ru problem. Status code is ' . $response->getStatusCode(), $response->getStatusCode());
+            throw new Exception(sprintf('Sms.ru problem. Status code is %s', $response->getStatusCode()), $response->getStatusCode());
         }
     }
 

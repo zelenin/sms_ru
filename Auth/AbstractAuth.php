@@ -6,6 +6,7 @@ use Zelenin\SmsRu\Api;
 
 abstract class AbstractAuth implements AuthInterface
 {
+
     /**
      * @var Api
      */
