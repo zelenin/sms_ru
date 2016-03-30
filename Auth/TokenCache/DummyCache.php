@@ -1,25 +1,37 @@
 <?php
 
-namespace Zelenin\SmsRu\Cache;
+namespace Zelenin\SmsRu\Auth\TokenCache;
 
 class DummyCache implements CacheInterface
 {
 
+    /**
+     * @inheritdoc
+     */
     public function exists($key)
     {
         return false;
     }
 
-    public function get($key, $default = null)
-    {
-        return $default;
-    }
-
-    public function set($key, $value, $ttl = null)
+    /**
+     * @inheritdoc
+     */
+    public function get($key)
     {
         return false;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function set($key, $value, $ttl = null)
+    {
+        return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function remove($key)
     {
         return true;

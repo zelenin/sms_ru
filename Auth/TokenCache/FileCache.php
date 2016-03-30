@@ -1,37 +1,38 @@
 <?php
 
-namespace Zelenin\SmsRu\Cache;
+namespace Zelenin\SmsRu\Auth\TokenCache;
 
 use Zelenin\SmsRu\Exception\Exception;
 
 class FileCache implements CacheInterface
 {
 
-    protected $path;
+    /**
+     * @var null|string
+     */
+    private $path;
 
     /**
-     * FileCache constructor.
      * @param string|null $path
      * @throws Exception
      */
     public function __construct($path = null)
     {
-        $this->path = $path = empty($path)
+        $this->path = empty($path)
             ? implode(DIRECTORY_SEPARATOR, [sys_get_temp_dir(), 'cache'])
             : $path;
 
-        if (!is_dir($path)) {
-            $this->mkdir($path);
+        if (!is_dir($this->path)) {
+            $this->mkdir($this->path);
         }
 
-        if (!is_writable($path)) {
+        if (!is_writable($this->path)) {
             throw new Exception(sprintf('Cache directory is not writable: %s', $path));
         }
     }
 
     /**
-     * @param string $key
-     * @return boolean
+     * @inheritdoc
      */
     public function exists($key)
     {
@@ -41,11 +42,9 @@ class FileCache implements CacheInterface
     }
 
     /**
-     * @param string $key
-     * @param mixed $default
-     * @return mixed
+     * @inheritdoc
      */
-    public function get($key, $default = null)
+    public function get($key)
     {
         $cacheFile = $this->getCacheFile($key);
 
@@ -57,19 +56,15 @@ class FileCache implements CacheInterface
                 @flock($fp, LOCK_UN);
                 @fclose($fp);
 
-                return $cacheValue;
+                return empty($cacheValue) ? false : $cacheValue;
             }
         }
 
-        return $default;
+        return false;
     }
 
     /**
-     * @param string $key
-     * @param mixed $value
-     * @param integer|null $ttl
-     * @return mixed
-     * @throws Exception
+     * @inheritdoc
      */
     public function set($key, $value, $ttl = null)
     {
@@ -92,8 +87,7 @@ class FileCache implements CacheInterface
     }
 
     /**
-     * @param string $key
-     * @return boolean
+     * @inheritdoc
      */
     public function remove($key)
     {
@@ -104,9 +98,10 @@ class FileCache implements CacheInterface
 
     /**
      * @param string $key
+     *
      * @return string
      */
-    protected function getCacheFile($key)
+    private function getCacheFile($key)
     {
         return $this->path . DIRECTORY_SEPARATOR . $key . '.bin';
     }
@@ -115,10 +110,11 @@ class FileCache implements CacheInterface
      * @param string $path
      * @param integer $mode
      * @param bool $recursive
+     *
      * @return bool
      * @throws Exception
      */
-    protected function mkdir($path, $mode = 0775, $recursive = true)
+    private function mkdir($path, $mode = 0775, $recursive = true)
     {
         if (is_dir($path)) {
             return true;
