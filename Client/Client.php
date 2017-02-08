@@ -10,7 +10,7 @@ class Client implements ClientInterface
     /**
      * @var string
      */
-    private $baseUrl = 'http://sms.ru/{method}';
+    private $baseUrl = 'https://sms.ru/{method}';
 
     /**
      * @param string $method
