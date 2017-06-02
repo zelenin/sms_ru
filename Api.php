@@ -21,6 +21,11 @@ use Zelenin\SmsRu\Response\StoplistAddResponse;
 use Zelenin\SmsRu\Response\StoplistDelResponse;
 use Zelenin\SmsRu\Response\StoplistGetResponse;
 
+/**
+ * Class Api
+ *
+ * @package Zelenin\SmsRu
+ */
 class Api
 {
     /**
@@ -32,14 +37,20 @@ class Api
      * @var ClientInterface
      */
     private $client;
+    
+    /**
+     * @var string
+     */
+    private $partner_id;
 
     /**
      * @param AuthInterface $auth
      */
-    public function __construct(AuthInterface $auth)
+    public function __construct(AuthInterface $auth, $partnerId = null)
     {
         $this->auth = $auth;
         $this->auth->setContext($this);
+        $this->partner_id = $partnerId;
     }
 
     /**
@@ -82,6 +93,8 @@ class Api
 
         if ($sms->partner_id) {
             $params['partner_id'] = $sms->partner_id;
+        }elseif ($this->partner_id){
+            $params['partner_id'] = $this->partner_id;
         }
 
         $response = $this->request('sms/send', $params);
