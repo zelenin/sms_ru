@@ -45,6 +45,7 @@ class Api
 
     /**
      * @param AuthInterface $auth
+     * @param string|null $partnerId
      */
     public function __construct(AuthInterface $auth, $partnerId = null)
     {
