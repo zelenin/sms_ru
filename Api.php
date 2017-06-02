@@ -45,13 +45,13 @@ class Api
 
     /**
      * @param AuthInterface $auth
-     * @param string|null $partnerId
+     * @param string|null $partner_id
      */
-    public function __construct(AuthInterface $auth, $partnerId = null)
+    public function __construct(AuthInterface $auth, $partner_id = null)
     {
         $this->auth = $auth;
         $this->auth->setContext($this);
-        $this->partner_id = $partnerId;
+        $this->partner_id = $partner_id;
     }
 
     /**
