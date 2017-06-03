@@ -22,6 +22,11 @@ class LoginPasswordSecureAuth extends AbstractAuth
      * @var null|string
      */
     private $apiId;
+    
+    /**
+     * @var null|string
+     */
+    private $partnerId;
 
     /**
      * @var CacheInterface
@@ -38,13 +43,15 @@ class LoginPasswordSecureAuth extends AbstractAuth
      * @param string $password
      * @param null|string $apiId
      * @param CacheInterface|null $cache
+     * @param null|string $partnerId
      */
-    public function __construct($login, $password, $apiId = null, CacheInterface $cache = null)
+    public function __construct($login, $password, $apiId = null, CacheInterface $cache = null, $partnerId=null)
     {
         $this->login = $login;
         $this->password = $password;
         $this->apiId = $apiId;
         $this->cache = $cache === null ? new DummyCache() : $cache;
+        $this->partnerId = $partnerId;
     }
 
     /**
@@ -69,6 +76,14 @@ class LoginPasswordSecureAuth extends AbstractAuth
     public function getApiId()
     {
         return $this->apiId;
+    }
+    
+    /**
+     * @return null|string
+     */
+    public function getPartnerId()
+    {
+        return $this->partnerId;
     }
 
     /**

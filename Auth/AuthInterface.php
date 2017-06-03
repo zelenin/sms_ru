@@ -10,6 +10,11 @@ interface AuthInterface
      * @return array
      */
     public function getAuthParams();
+    
+    /**
+     * @return null|string
+     */
+    public function getPartnerId();
 
     /**
      * @return Api
