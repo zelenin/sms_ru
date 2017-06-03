@@ -16,7 +16,12 @@ abstract class AbstractAuth implements AuthInterface
      * @return array
      */
     abstract public function getAuthParams();
-
+    
+    /**
+     * @return null|string
+     */
+    abstract public function getPartnerId();
+    
     /**
      * @return Api
      */
