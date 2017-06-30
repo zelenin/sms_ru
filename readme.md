@@ -60,6 +60,8 @@ $client->smsSend(new \Zelenin\SmsRu\Entity\SmsPool([$sms1, $sms2]));
 Статус SMS:
 
 ```php
+$send = $client->smsSend($sms);
+$smsId = $send->ids[0];
 $client->smsStatus($smsId);
 ```
 
