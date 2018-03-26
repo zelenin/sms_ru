@@ -6,11 +6,23 @@ use Zelenin\SmsRu\Exception\Exception;
 
 class Client implements ClientInterface
 {
-
     /**
      * @var string
      */
     private $baseUrl = 'https://sms.ru/{method}';
+
+    /**
+     * @var \GuzzleHttp\Client
+     */
+    private $client;
+
+    /**
+     * @param array $config Additional configuration for Guzzle Client
+     */
+    public function __construct($config = [])
+    {
+        $this->client = new \GuzzleHttp\Client($config);
+    }
 
     /**
      * @param string $method
@@ -22,9 +34,7 @@ class Client implements ClientInterface
      */
     public function request($method, $params = [])
     {
-        $client = new \GuzzleHttp\Client();
-
-        $response = $client->post($this->getUrl($method), ['query' => $params]);
+        $response = $this->client->post($this->getUrl($method), ['query' => $params]);
 
         if ($response->getStatusCode() === 200) {
             return (string)$response->getBody();

@@ -32,7 +32,7 @@ class Api
      * @var ClientInterface
      */
     private $client;
-    
+
     /**
      * @param AuthInterface $auth
      */
