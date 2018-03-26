@@ -6,12 +6,6 @@ interface ClientInterface
 {
 
     /**
-     * Provides an additional configs for client service
-     * @param array $config
-     */
-    public function __construct($config = []);
-
-    /**
      * @param string $method
      * @param array $params
      *

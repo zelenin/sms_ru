@@ -34,19 +34,12 @@ class Api
     private $client;
 
     /**
-     * @var array
-     */
-    private $config = [];
-
-    /**
      * @param AuthInterface $auth
-     * @param array $config additional config setting for client service
      */
-    public function __construct(AuthInterface $auth, $config = [])
+    public function __construct(AuthInterface $auth)
     {
         $this->auth = $auth;
         $this->auth->setContext($this);
-        $this->config = $config;
     }
     
     /**
@@ -287,7 +280,7 @@ class Api
     public function getClient()
     {
         if ($this->client === null) {
-            $this->client = new Client($this->config);
+            $this->client = new Client();
         }
         
         return $this->client;
