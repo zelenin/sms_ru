@@ -12,7 +12,7 @@ class Client implements ClientInterface
     private $baseUrl = 'https://sms.ru/{method}';
 
     /**
-     * @var Client
+     * @var \GuzzleHttp\Client
      */
     private $client;
 
