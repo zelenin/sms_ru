@@ -3,7 +3,6 @@
 namespace Zelenin\SmsRu;
 
 use Zelenin\SmsRu\Auth\AuthInterface;
-use Zelenin\SmsRu\Client\Client;
 use Zelenin\SmsRu\Client\ClientInterface;
 use Zelenin\SmsRu\Entity\AbstractSms;
 use Zelenin\SmsRu\Entity\Sms;
@@ -27,7 +26,7 @@ class Api
      * @var AuthInterface
      */
     private $auth;
-    
+
     /**
      * @var ClientInterface
      */
@@ -36,12 +35,13 @@ class Api
     /**
      * @param AuthInterface $auth
      */
-    public function __construct(AuthInterface $auth)
+    public function __construct(AuthInterface $auth, ClientInterface $client)
     {
         $this->auth = $auth;
         $this->auth->setContext($this);
+        $this->client = $client;
     }
-    
+
     /**
      * @param AbstractSms $sms
      *
@@ -51,45 +51,45 @@ class Api
     public function smsSend(AbstractSms $sms)
     {
         $params = [];
-        
+
         if ($sms instanceof Sms) {
             $params['to'] = $sms->to;
             $params['text'] = $sms->text;
-        } elseif ($sms instanceof SmsPool) {
+        } else if ($sms instanceof SmsPool) {
             foreach ($sms->messages as $message) {
                 $params['multi'][$message->to] = $message->text;
             }
         } else {
             throw new Exception('Only Sms or SmsPool instances');
         }
-        
+
         if ($sms->from) {
             $params['from'] = $sms->from;
         }
-        
+
         if ($sms->time && $sms->time < (time() + 7 * 24 * 60 * 60)) {
             $params['time'] = $sms->time;
         }
-        
+
         if ($sms->translit) {
             $params['translit'] = 1;
         }
-        
+
         if ($sms->test) {
             $params['test'] = 1;
         }
-        
+
         if ($sms->partner_id) {
             $params['partner_id'] = $sms->partner_id;
-        } elseif ($this->getAuth()->getPartnerId()) {
+        } else if ($this->getAuth()->getPartnerId()) {
             $params['partner_id'] = $this->getAuth()->getPartnerId();
         }
-        
+
         $response = $this->request('sms/send', $params);
         $response = explode("\n", $response);
-        
+
         $smsResponse = new SmsResponse(array_shift($response));
-        
+
         if ($smsResponse->code == 100) {
             foreach ($response as $id) {
                 if (!preg_match('/=/', $id)) {
@@ -101,10 +101,10 @@ class Api
 //                }
             }
         }
-        
+
         return $smsResponse;
     }
-    
+
     /**
      * @param string $id
      *
@@ -118,12 +118,12 @@ class Api
                 'id' => $id,
             ]
         );
-        
+
         $response = explode("\n", $response);
-        
+
         return new SmsStatusResponse(array_shift($response));
     }
-    
+
     /**
      * @param Sms $sms
      *
@@ -135,17 +135,17 @@ class Api
             'to'   => $sms->to,
             'text' => $sms->text,
         ];
-        
+
         $response = $this->request('sms/cost', $params);
         $response = explode("\n", $response);
-        
+
         $smsCostResponse = new SmsCostResponse(array_shift($response));
         $smsCostResponse->price = (float)$response[0];
         $smsCostResponse->length = (int)$response[1];
-        
+
         return $smsCostResponse;
     }
-    
+
     /**
      * @return MyBalanceResponse
      */
@@ -153,13 +153,13 @@ class Api
     {
         $response = $this->request('my/balance');
         $response = explode("\n", $response);
-        
+
         $myBalanceResponse = new MyBalanceResponse(array_shift($response));
         $myBalanceResponse->balance = (float)$response[0];
-        
+
         return $myBalanceResponse;
     }
-    
+
     /**
      * @return MyLimitResponse
      */
@@ -167,14 +167,14 @@ class Api
     {
         $response = $this->request('my/limit');
         $response = explode("\n", $response);
-        
+
         $myLimitResponse = new MyLimitResponse(array_shift($response));
         $myLimitResponse->limit = (int)$response[0];
         $myLimitResponse->current = (int)$response[1];
-        
+
         return $myLimitResponse;
     }
-    
+
     /**
      * @return MySendersResponse
      */
@@ -182,18 +182,18 @@ class Api
     {
         $response = $this->request('my/senders');
         $response = explode("\n", $response);
-        
+
         $mySendersResponse = new MySendersResponse(array_shift($response));
-        
+
         foreach ($response as $phone) {
             if ($phone) {
                 $mySendersResponse->phones[] = $phone;
             }
         }
-        
+
         return $mySendersResponse;
     }
-    
+
     /**
      * @return AuthCheckResponse
      */
@@ -201,10 +201,10 @@ class Api
     {
         $response = $this->request('auth/check');
         $response = explode("\n", $response);
-        
+
         return new AuthCheckResponse(array_shift($response));
     }
-    
+
     /**
      * @param string $stoplistPhone
      * @param string $stoplistText
@@ -220,12 +220,12 @@ class Api
                 'stoplist_text'  => $stoplistText,
             ]
         );
-        
+
         $response = explode("\n", $response);
-        
+
         return new StoplistAddResponse(array_shift($response));
     }
-    
+
     /**
      * @param string $stoplistPhone
      *
@@ -239,12 +239,12 @@ class Api
                 'stoplist_phone' => $stoplistPhone,
             ]
         );
-        
+
         $response = explode("\n", $response);
-        
+
         return new StoplistDelResponse(array_shift($response));
     }
-    
+
     /**
      * @return StoplistGetResponse
      */
@@ -252,48 +252,28 @@ class Api
     {
         $response = $this->request('stoplist/get');
         $response = explode("\n", $response);
-        
+
         $stoplistGetResponse = new StoplistGetResponse(array_shift($response));
-        
+
         foreach ($response as $phone) {
             $phone = explode(';', $phone);
             $stoplistGetResponse->phones[] = new StoplistPhone($phone[0], $phone[1]);
         }
-        
+
         return $stoplistGetResponse;
     }
-    
+
     /**
      * @param string $method
-     * @param array  $params
+     * @param array $params
      *
      * @return string
      */
     public function request($method, $params = [])
     {
-        return $this->getClient()->request($method, array_merge($params, $this->getAuth()->getAuthParams()));
+        return $this->client->request($method, array_merge($params, $this->getAuth()->getAuthParams()));
     }
-    
-    /**
-     * @return ClientInterface
-     */
-    public function getClient()
-    {
-        if ($this->client === null) {
-            $this->client = new Client();
-        }
-        
-        return $this->client;
-    }
-    
-    /**
-     * @param ClientInterface $client
-     */
-    public function setClient(ClientInterface $client)
-    {
-        $this->client = $client;
-    }
-    
+
     /**
      * @return AuthInterface
      */

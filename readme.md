@@ -13,13 +13,13 @@ PHP-класс для работы с api сервиса [sms.ru](http://sms.ru)
 Запустите
 
 ```
-php composer.phar require zelenin/smsru "~4"
+php composer.phar require zelenin/smsru "~5"
 ```
 
 или добавьте
 
-```js
-"zelenin/smsru": "~4"
+```
+"zelenin/smsru": "~5"
 ```
 
 в секцию ```require``` вашего composer.json
@@ -29,19 +29,19 @@ php composer.phar require zelenin/smsru "~4"
 Простая авторизация (с помощью api_id):
 
 ```php
-$client = new \Zelenin\SmsRu\Api(new \Zelenin\SmsRu\Auth\ApiIdAuth($apiId));
+$client = new \Zelenin\SmsRu\Api(new \Zelenin\SmsRu\Auth\ApiIdAuth($apiId), new \Zelenin\SmsRu\Client\Client());
 ```
 
 Усиленная авторизация (с помощью api_id, логина и пароля):
 
 ```php
-$client = new \Zelenin\SmsRu\Api(new \Zelenin\SmsRu\Auth\LoginPasswordSecureAuth($login, $password, $apiId));
+$client = new \Zelenin\SmsRu\Api(new \Zelenin\SmsRu\Auth\LoginPasswordSecureAuth($login, $password, $apiId), new \Zelenin\SmsRu\Client\Client());
 ```
 
 Усиленная авторизация (с помощью логина и пароля):
 
 ```php
-$client = new \Zelenin\SmsRu\Api(new \Zelenin\SmsRu\Auth\LoginPasswordAuth($login, $password));
+$client = new \Zelenin\SmsRu\Api(new \Zelenin\SmsRu\Auth\LoginPasswordAuth($login, $password), new \Zelenin\SmsRu\Client\Client());
 ```
 
 Отправка SMS:
