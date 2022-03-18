@@ -23,6 +23,7 @@
     },
     "require": {
         "php": ">=5.5.0",
+        "ext-json": "*",
         "guzzlehttp/guzzle": "~6 || ~7"
     },
     "autoload": {
