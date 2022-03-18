@@ -17,7 +17,7 @@ class CallCodeResponse extends AbstractResponse
     public $callId;
 
     protected $availableDescriptions = [
-        '100' => 'Запрос выполнен. На второй строчке вы найдете ваше текущее дневное ограничение. На третьей строчке количество сообщений, отправленных вами в текущий день.',
+        '100' => 'Запрос выполнен.',
         '200' => 'Неправильный api_id.',
         '210' => 'Используется GET, где необходимо использовать POST.',
         '211' => 'Метод не найден.',
@@ -30,9 +30,11 @@ class CallCodeResponse extends AbstractResponse
     public static function makeByJson(array $json)
     {
         if ($json['status'] == 'ERROR') {
-            $errorCode = '400';
-            $response = new CallCodeResponse($errorCode);
-            $response->availableDescriptions[$errorCode] = $json['status_text'];
+            $code = '400';
+
+            $response = new CallCodeResponse($code);
+            $response->availableDescriptions[$code] = $json['status_text'];
+
             return $response;
         }
 
