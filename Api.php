@@ -10,6 +10,7 @@ use Zelenin\SmsRu\Entity\SmsPool;
 use Zelenin\SmsRu\Entity\StoplistPhone;
 use Zelenin\SmsRu\Exception\Exception;
 use Zelenin\SmsRu\Response\AuthCheckResponse;
+use Zelenin\SmsRu\Response\CallCodeResponse;
 use Zelenin\SmsRu\Response\MyBalanceResponse;
 use Zelenin\SmsRu\Response\MyLimitResponse;
 use Zelenin\SmsRu\Response\MySendersResponse;
@@ -261,6 +262,21 @@ class Api
         }
 
         return $stoplistGetResponse;
+    }
+
+    public function codeCall($phone)
+    {
+        $params = array_merge(['phone' => $phone], $this->getAuth()->getAuthParams());
+        $response = $this->client->request('code/call', $params);
+
+        $json = json_decode($response, true);
+
+        if (is_array($json) == false) {
+            $response = explode("\n", $response);
+            return new CallCodeResponse(array_shift($response));
+        }
+
+        return CallCodeResponse::makeByJson($json);
     }
 
     /**

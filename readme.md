@@ -113,6 +113,13 @@ $client->stoplistDel($phone);
 $client->stoplistGet();
 ```
 
+Отправить четырехзначный авторизационный код звонком:
+
+```php
+$response = $client->codeCall($phone);
+echo $response->checkCode;
+```
+
 ## Автор
 
 [Александр Зеленин](https://github.com/zelenin/), e-mail: [aleksandr@zelenin.me](mailto:aleksandr@zelenin.me)
